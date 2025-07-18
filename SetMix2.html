@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Song/Scroll Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1, h2 {
+            color: #0056b3;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        button {
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        li {
+            margin-bottom: 10px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #lyricsDisplay {
+            margin-top: 4px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            min-height: 95vh;
+            max-height: 95vh;
+            overflow-y: auto;
+            display: none;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        #lyricsDisplay h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            color: #0056b3;
+            font-size: 1.5em;
+        }
+        #lyricsContentArea {
+            margin-top: 10px;
+            padding-top: 0;
+            font-size: 1.1em;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        #lyricsContentArea pre {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-weight: 900; /* Attempting maximum pure boldness */
+            filter: brightness(0.4) contrast(2.5); /* Aggressive visual boldness */
+            color: black; /* Ensure color is not washed out */
+            white-space: pre-wrap; /* Respects manual line breaks and wraps long lines */
+            word-wrap: break-word; /* Older property for word wrapping */
+            word-break: break-word; /* Forces words to break if they are too long */
+            overflow-wrap: break-word; /* Modern equivalent for word-wrap */
+            hyphens: auto; /* Allow hyphenation for better wrapping */
+        }
+        .lyrics-content {
+            display: none;
+        }
+        .lyrics-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Normal</h1>
+    <button id="randomizeBtn1">Randomize</button>
+    <ul id="linkList1">
+        </ul>
+
+    <h2>Halfstep</h2>
+    <button id="randomizeBtn2">Randomize</button>
+    <ul id="linkList2">
+        </ul>
+
+    <div id="lyricsDisplay">
+        <h3 id="lyricsTitle"></h3>
+        <div id="lyricsContentArea">
+            </div>
+    </div>
+    
+    <script>
+        const lyricsData = {
+            "lifestyles": `Always see it on TV, Or read it in the magazines
+Celebrities want sympathy, All they do is piss and moan
+Inside the Rolling Stone, Talkin' about how hard life can be
+
+I'd like to see them spend a week, Livin' life out on the street
+I don't think they would survive, If they could spend a day or two
+Walkin' in someone else's shoes, I think they'd stumble and they'd fall
+They would fall, fall
+
+Lifestyles of the rich and the famous
+They're always complainin'  Always complainin'
+If money is such a problem, Well, they got mansions
+Think we should rob them
+
+Well, did you know when you were famous you could kill your wife
+And there's no such thing as 25 to life
+As long as you've got the cash to pay for Cochran
+And did you know if you were caught and you were smokin' crack
+McDonald's wouldn't even wanna take you back
+You could always just run for mayor of D.C.
+
+I'd like to see them spend a week, Livin' life out on the street
+I don't think they would survive, If they could spend a day or two
+Walking in someone else's shoes
+I think they'd stumble and they'd fall
+They would fall
+
+Lifestyles of the rich and the famous
+They're always complainin', Always complainin'
+If money is such a problem, Well, they got mansions
+Think we should rob them ….(rob them)
+
+[Interlude]
+
+They would fall
+
+Lifestyles of the rich and the famous
+They're always complainin', Always complainin'
+If money is such a problem, You got so many problems
+Think I could solve them
+
+Lifestyles of the rich and famous
+We'll take your clothes, cash, cars and homes, just stop complainin'
+
+Lifestyles of the rich and famous x3
+            `,
+            "digIn": `It's time to face and come-on in and join the party
+Life has been waiting for you to care
+Don't try to fake it, jump on in and get it started
+There's so much loving for you to share
+
+There is nowhere to run, There is no way to hide
+Don't let it beat you, Say "nice to meet you" and "bye"
+
+Once you dig in, You'll find it coming out the other side
+And once you dig in, You'll find you'll have yourself a good time
+
+Wake up and shake it, you didn't make your contribution
+There ain't no time for you to spare
+If you ain't part of the game, then how can you find a solution?
+Nobody said that it would be fair
+
+When the mountain is high, Just look up to the sky
+Ask God to teach you, Then persevere with a smile
+Yeah, yeah, yeah
+
+Once you dig in, You'll find it coming out the other side
+And once you dig in, You'll find you'll have yourself a good time
+
+Once you dig in, You'll find it coming out the other side
+And once you dig in, You'll find you'll have yourself a good time
+
+[Guitar Solo]
+
+Once you dig in, You'll find it coming out the other side
+And once you dig in, You'll find you'll have yourself a good time
+
+Once you dig in, You'll find it coming out the other side
+And once you dig in, You'll find you'll have yourself a good time
+
+Once you dig in, Yeah, yeah, yeah
+And once you dig in, You'll find you'll have yourself a good time
+
+Once you dig in (once you dig in)
+You'll find it coming out the other side, And once you dig in…
+            `,
+            "sob": `You make the stars, illusions and dreams
+You're what you are, d'you know what I mean?
+
+I hear you clear, I see in your eyes, Lying to please, it pleases to lie
+
+You say it's your way, You say we'll make it right to the top
+Your bullshit gets me, what have you got?
+
+I don't believe a word you say, You make me laugh, get outta my way
+You say it's your way, Now listen to what I think of you
+
+Son of a bitch!, Kiss my ass, son of a bitch! x2
+
+Cocksuckin' motherfucker, I was right - take this!
+Uuuuuuuuuuuuuuuh...
+
+Son of a bitch!, Kiss my ass, son of a bitch! x2
+Aaaaah!!!
+
+Son of a bitch!, Son of a bitch!, Ah! Ah! Ah!, Son of a bitch!
+Cut you three times below the ass too short to shit
+Son of a bitch!, Ha, ha, ha, ha!, Son of a bitch!, Two-timing son of a dog!
+Son of a bitch!, Son of a bitch!, Oh yeah!, Son of a bitch!
+Yooou son of a bitch! Mother... son of a bitch!
+Son of a bitch!`,
+            "allTheSmallThings": `All the small things, True care, truth brings
+I'll take one lift, Your ride, best trip
+Always, I know, You'll be at my show
+Watching, waiting, Commiserating
+
+Say it ain't so, I will not go
+Turn the lights off, carry me home
+
+Na na  many times
+
+Late night, come home, Work sucks, I know
+She left me roses by the stairs
+Surprises let me know she cares
+
+Just say it ain't so, I will not go
+Turn the lights off, carry me home
+
+Na na  many times
+
+Say it ain't so, I will not go
+Turn the lights off, carry me home
+Keep your head still, I'll be your thrill
+The night will go on, my little windmill
+
+(Na na, na na, na na, na na, na, na)
+Say it ain't so, I will not go
+(Na na, na na, na na, na na, na, na)
+Turn the lights off, carry me home
+(Na na, na na, na na, na na, na, na)
+Keep your head still, I'll be your thrill
+(Na na, na na, na na, na na, na, na)
+The night will go on, the night will go on, my little windmill `,
+            "java": `I'm a Java junkie, I can't think without my coffee
+how can I make it through the day without three pots of my coffee?
+I'm a Java junkie, I'm the first one to admit
+if I don't get my coffee, you can see me throw a fit
+I'm a Java junkie, I can't live without my coffee
+how can I make it through the day without three pots of my coffee?
+I'm a Java junkie, I'm the first one to admit
+if I don't get my coffee, you can see me throw a fit
+
+Java, Junkie x4
+
+Starbucks is the place to go, when you need an espresso
+Suck it down, Right away, You'll be wired, throughout the day
+Ha ha ha haaaa....
+
+I am a Java junkie, I can't think without my coffee
+I am a Java junkie, I can't live without my coffee
+I am a Java junkie, I can't think without my coffee
+I am a Java junkie, Eyah! I'm a junkie
+
+I am a Java junkie, I can't think without my coffee
+I am a Java junkie, I can't live without my coffee
+I am a Java junkie, I can't think without my coffee
+I am a Java junkie, Java junkie `,
+            "generalContractor": `My name is Bill and I'll build your garage
+It doesn't matter if it's big or it's small
+I got my tools and my fee ain't large
+Build your addition or your decks
+I can do it all
+
+I'll build your garage, Won't take me that long
+Won't damage your lawn, Be here and then gone
+
+Fully licensed to do the job
+Legally bonded and I'm cheaper than Bob
+Got my number, give me a call
+I'll start in summer and need fine before fall
+
+Just give me a call, I can build it all
+Be right on the ball and be done before fall
+
+I got my tools and my paint and much much more
+Got carpet and linoleum for your floor
+Got a flatbed truck with a John Deere tractor
+Name is Bill, your general contractor
+
+Bill, give me a call `,
+            "bigAir": `Summertime, what a drag
+No big air, full dork of a bag
+Count down the days, for the first run
+Finally big air the funs just begun
+
+Shred the slopes, winter surf, catch big air
+so rad, catch big air drink more beer
+CATCH BIG AIR/DRINK MORE BEER
+
+big air is god x2
+
+Early in the morning, gonna hit the slopes 
+mount baker half pipe is better than dope
+flying thru the air really gets you pumped
+thirty foot cliffs forget the weeny jumps
+
+Shred the slopes, winter surf, catch big air
+so rad, catch big air drink more beer
+CATCH BIG AIR/DRINK MORE BEER
+
+A I R  `,
+            "sonicsGirl": `Her eyes shine like the sun, Her smile makes me come undone
+She don't know, know that I exist, But when they're on the road
+She's the one I miss
+
+She's my number one Sonics Dance Team Girl
+She's all my world, my Sonics dance team girl
+
+Now she struts her stuff, Every time out and half
+She boogies like no one else can, She don't know, know that I exist
+But when they're on the road, She's the one I miss
+
+I miss my number one Sonics Dance Team Girl
+She's all my world, my Sonics dance team girl
+
+[Guitar Solo]
+
+She's my number one Sonics Dance Team Girl
+She's all my world
+My Sonics, my Sonics, she's my.....
+            
+Sonic's dance team girl x 5
+            
+Oh girl, oh oh oh girl, oh girl, girl `,
+            "monkeyWrench": `What have we done with innocence?
+It disappeared with time, it never made much sense
+Adolescent resident, Wasting another night on planning my revenge
+
+One in ten x3
+         
+[Chorus]
+Don't want to be your monkey wrench, One more indecent accident
+I'd rather leave than suffer this, I'll never be your monkey wrench
+
+All this time to make amends
+What do you do when all your enemies are friends?
+Now and then I'll try to bend
+Under pressure, wind up snapping in the end
+
+One in ten x3
+
+[Chorus]
+
+Temper x3
+
+One last thing before I quit
+I never wanted any more than I could fit Into my head
+I still remember every single word you said, 
+And all the shit that somehow came along with it
+Still there's one thing that comforts me
+Since I was always caged and now I'm free
+
+[Chorus]
+
+Don't want to be your monkey wrench 
+(fall in, fall out) X4 `,
+            "3LittlePigs": `Why don't you sit right back, And I, I may tell you a tale
+A tale of three little pigs, And a big bad wolf
+
+Well the first little piggy, well he was kinda hick-y
+Spent most of his days just a-dreamin' of the city
+And then one day, he bought a guitar
+He moved to Hollywood to become a star
+But living on the farm, he knew nothing of the city
+Built his house out of straw, what a pity
+Then one day, jammin' on some chords
+Along came the wolf knocking on his door
+
+Little Pig, Little Pig, let me in
+Not by the hair of my chinny, chin, chin! x2
+Well I'm huffin', I'm puffin', I'll blow your house in
+Huffin', puffin', blow your house in x2
+Huffin' and a puffin' and I'll blow your house in!
+
+Well the second little piggy, well he was kinda stoned
+He spent most of his time just a-ganja smokin'
+Hoppin' and a-boppin' down on Venice Beach
+Getting paid money for religious speech
+Built his shelter from what he garbage picked
+Mostly made up of old cans and sticks
+Then one day he was cranking up Bob Marley
+Along came the Wolf on his big bad Harley
+
+Little Pig, Little Pig, let me in
+Not by the hair of my chinny, chin, chin! x2
+Well I'm huffin', I'm puffin', I'll blow your house in
+Huffin', puffin', blow your house in x2
+Huffin' and a puffin' and I'll blow your house in!
+
+Well the third little piggy, the grade A student
+His daddy was a rock star, named Pig Nugent
+Earned his Master's degree from Harvard College
+Built his house from his architect knowledge
+A tri-level mansion, Hollywood Hills
+Daddy's rock stardom paid for the bills
+Then one day came the old house smasher
+The big bad wolf, the little piggy slasher
+
+Little Pig, Little Pig, let me in
+Not by the hair of my chinny, chin, chin! x2
+Well I'm huffin', I'm puffin', I'll blow your house in
+Huffin', puffin', blow your house in x2
+Huffin' and a puffin' and I'll blow your house in!
+
+Well the big bad wolf
+Well he huffed, and he puffed, all that he could
+And lo and behold, the little piggy's house stood
+"It's made out of concrete," the little piggy shouted
+The wolf just frowned as he pouted
+So they called nine-eleven, like any piggy would
+They sent out Rambo, just as fast as they could
+
+"Yo, Wolf-face. I'm your worst nightmare. Your ass is mine!"
+(gunshots)
+
+Well the wolf fell dead as you can plainly see
+And that's the end of this story, for you and me
+If you still give a listen, you just may
+Hear the big wolf or little piggies say
+
+Little Pig, Little Pig, let me in
+Not by the hair of my chinny, chin, chin! x2
+Well I'm huffin', I'm puffin', I'll blow your house in
+Huffin', puffin', blow your house in x3
+Huffin' and a puffin' and I'll blow your house in! x4
+
+And the moral of the story is that bands with no talent
+can easily amuse idiots with a stupid puppet show `,
+            "seeYouInHell": `See you in Hell!
+
+Can I make you an offer, You can't refuse
+I kept my eyes on you, Cause I tell you that you lose
+And you can come with me  To a place you'll know so well
+And I will take you, To the very gates of Hell
+
+See you in Hell my friend x3
+I'll see you in Hell!
+
+Your choice's up then, How many sins can be yours
+At my kingdom final choice, Is yours!
+You can take it, Any time that you need
+Next thing I'll borrow, All you've got to do is bleed
+
+See you in Hell my friend x3
+I'll see you in Hell!
+
+Come with me, I will take you down
+To the very depths of your soul
+And I'll make you burn!
+
+See you... see you in Hell! x2
+
+See you in Hell!
+Can I make you an offer  You can't refuse
+I kept my eyes on you, Cause I tell you that you lose
+And you can come with me, To a place you'll know so well
+Like I told you, At the very gates of Hell
+
+See you in Hell my friend x3
+I'll see you in Hell! `,
+            "22Acacia": `If you're feeling down, depressed and lonely
+I know a place where we can go (Go)
+22 Acacia Avenue, Meet a lady that I know
+So if you're looking for a good time, And you're prepared to pay the price
+Fifteen quid is all she asks for, Everybody's got their vice
+
+If you're waiting for a long time, For the rest to do their piece
+You can tell her that you know me, You might even get in free
+So any time you're down the East End, Don't you hesitate to go
+You can take my honest word for it, She'll teach you more than you can know
+
+Charlotte, can't you get out from all this madness?
+Can't you see it only brings you sadness?
+When you entertain your men don't you know the risk of getting disease?
+Some day when you've reached the age of forty
+I bet you'll regret the days when you were laying
+Nobody then will want to know
+You won't have any more beautiful wares to show anymore
+
+22, the Avenue, That's the place where we all go
+You will find it's warm inside, The red light's burning bright tonight
+
+Charlotte, isn't it time you stopped this mad life?
+Don't you ever think about the bad times?
+Why do you have to live this way?
+Do you enjoy your lay or is it the pay?
+Sometimes when you're strolling down the Avenue
+The way you walk, it makes men think of having you
+When you're walking down the street
+Everybody stops and turns to stare at you
+
+22, the Avenue, That's the place where we all go
+You will find it's warm inside, The red light's burning bright tonight
+
+Beat her, mistreat her, do anything that you please
+Bite her, excite her, make her get down on her knees
+Abuse her, misuse her, she can take all that you've got
+Caress her, molest her, she always does what you want
+
+[Instrumental Break]
+
+You're running away, don't you know what you're doing?
+Can't you see it'll lead you to ruin?
+Charlotte, you've taken your life and you've thrown it away
+You believe that because what you're earning
+Your life's good, don't you know that it's hurting?
+All the people that love you, don't cast them aside
+All the men that are constantly drooling
+It's no life for you, stop all that screwing
+You're packing your bags, you're coming with me `,
+            "trooper": `You'll take my life, but I'll take yours too
+You'll fire your musket, but I'll run you through
+So when you're waiting for the next attack
+You'd better stand, there's no turning back
+The bugle sounds, the charge begins
+But on this battlefield, no one wins
+The smell of acrid smoke and horse's breath
+As I plunge on into certain death
+
+Oh oh oh oh oh oh oh oh oh x2
+
+The horse, he sweats with fear, we break to run
+The mighty roar of the Russian guns
+And as we race towards the human wall
+The screams of pain as my comrades fall
+We hurdle bodies that lay on the ground
+And the Russians fire another round
+We get so near, yet so far away
+We won't live to fight another day
+
+Oh oh oh oh oh oh oh oh oh x2
+
+[Guitar Solo]
+
+We get so close, near enough to fight
+When a Russian gets me in his sights
+He pulls the trigger and I feel the blow
+A burst of rounds takes my horse below
+And as I lay there, gazing at the sky
+My body's numb and my throat is dry
+And as I lay forgotten and alone
+Without a tear, I draw my parting groan
+
+Oh oh oh oh oh oh oh oh oh x2`,
+            "breakingLaw": `There I was completely wasting, out of work and down
+All inside, it's so frustrating as I drift from town to town
+Feel as though nobody cares if I live or die
+So I might as well begin to put some action in my life
+
+Breaking the law, breaking the law x4
+
+So much for the golden future, I can't even start
+I've had every promise broken, there's anger in my heart
+You don't know what it's like, you don't have a clue
+If you did, you'd find yourselves doing the same thing too
+
+Breaking the law, breaking the law x4
+
+You don't know what it's like
+
+[Instrumental Break]
+
+Breaking the law, breaking the law x8`,
+            "grinder": `Never straight and narrow, I won't keep in time
+Tend to burn the arrow out of the line
+Been inclined to wander, Off the beaten track
+That's where there's thunder and the wind shouts back
+
+Grinder, Looking for meat
+Grinder, Wants you to eat
+
+Got no use for routine  I shiver at the thought
+Open skies are my scene that's why I won't get caught
+Refuse to bait the mantrap  Be led to set the snare
+I love to have my sight capped everywhere
+
+Grinder  Looking for meat
+Grinder, Wants you to eat
+
+[Guitar Solo]
+
+I've held my licence, It came with birth
+For self-reliance on this earth
+You take the bullet, On which my name
+Was etched upon in your game
+
+Day of independence  Stamped us like a brand
+Round the necks of millions to the land
+As the mighty eagle  I need room to breath
+Witness from the treadmill, I take my leave
+
+Grinder  Looking for meat
+Grinder, Wants you to eat
+
+Grinder, Looking for meat
+Grinder, Wants you to eat
+
+Grinder `,
+            "myOwnWorst": `Can we forget about the things I said , when I was drunk?
+I didn't mean to call you that
+I can't remember what was said or what you threw at me
+Please tell me...
+
+Please tell me why my car is in the front yard,
+And I'm sleeping with my clothes on
+I came in through the window last night
+And you're gone, gone
+
+It's no surprise to me I am my own worst enemy
+'Cause every now and then I kick the living 
+shit out of me
+The smoke alarm is going off, and there's a 
+cigarette, Still burning,
+
+Please tell me why my car is in the front yard
+And I'm sleeping with my clothes on
+I came in through the window last night
+And you're gone, gone
+
+Please tell me why my car is in the front yard
+And I'm sleeping with my clothes on
+I came in through the window last night
+
+Ahooo
+It's no surprise to me I am my own worst enemy
+Ahooo
+'Cause every now and then I kick the living 
+shit out of me
+Ahooo
+Can we forget about the things I said when 
+I was drunk?
+Ahooo
+I didn't mean to call you that `,
+            "metalChurch": `Many, many years ago, on a distant shore
+Men did gather secretly beyond a hidden door
+They travelled long and travelled far
+dark into the night
+Yes, this is the place they've chosen
+ to build the metal site
+
+Congregation rises, starts to chant a hymn
+Of evil, lust and hatred, the roots of every sin
+The priest, he stands before them
+tells them why they are this way
+Why they worship metal gods, each and every day
+By the hand of Oberon, dark into the deep
+They love the evil things we do
+the secrets that we keep
+
+Metal church, unholy church, who'll be the sacrifice?
+Metal church, the only church, you know the time is right
+Metal church will find you, can't run very far
+Metal church inside you, it knows just who you are
+Who you are!
+
+No use in speaking out against the things that we do
+While the men of Earth, they sleep, haven't any clue
+So, now, the story starts again, all the time is lost
+Metal church begins anew, saving souls that are lost
+
+Metal church, unholy church, who'll be the sacrifice?
+Metal church, the only church, you know the time is right
+Metal church will find you, can't run very far
+Metal church inside you, knows just who you are
+Who you are!
+
+[Guitar Solo]
+[Instrumental Break]
+[Outro]
+The Metal Church! `,
+            "seekAndDestroy": `We're scannin' the scene in the city tonight
+We're lookin' for you to start up the fight
+There's an evil feeling in our brains
+But it's nothin' new, you know it drives us insane
+
+Runnin', on our way, Hidin', you will pay
+Dyin', one thousand deaths, Runnin', on our way
+Hidin', you will pay, Dyin', one thousand deaths
+
+Searchin', seek and destroy x4
+
+There is no escape and that's for sure
+This is the end, we won't take any more
+Say goodbye to the world you live in
+You always been takin' and now you're givin'
+
+Runnin', on our way, Hidin', you will pay
+Dyin', one thousand deaths, Runnin', on our way
+Hidin', you will pay, Dyin', one thousand deaths
+
+Searchin', seek and destroy x4
+
+[Guitar Solo]
+
+Our brains are on fire with the feelin' to kill
+And it won't go away until our dreams are fulfilled
+There is only one thing on our minds
+Don't try runnin' away, 'cause you're the one we will find
+
+Runnin', on our way, Hidin', you will pay
+Dyin', one thousand deaths, Runnin', on our way
+Hidin', you will pay, Dyin', one thousand deaths
+
+Searchin', seek and destroy x4
+aha-ha-ha-ha`,
+            "bellTolls": `Make his fight, on the hill, in the early day
+Constant chill deep inside
+Shouting gun, on they run, through the endless grey
+On they fight, for theyâ€™re right, yes, but who's to say?
+For a hill, men would kill, why? They do not know
+Stiffened wounds test their pride
+Men of five, still alive, through the raging glow
+Gone insane from the pain that they surely know
+
+For whom the bell tolls, Time marches on
+For whom the bell tolls
+
+[Instrumental Break]
+
+Take a look to the sky just before you die
+It's the last time he will
+Blackened roar, massive roar, fills the crumbling sky
+Shattered goal fills his soul with a ruthless cry
+Stranger now are his eyes to this mystery
+Hears the silence so loud
+Crack of dawn, all is gone, except the will to be
+Now they see what will be, blinded eyes to see
+
+For whom the bell tolls, Time marches on
+For whom the bell tolls
+
+[Instrumental Outro] `,
+            "amIEvil": `My mother was a witch, she was burned alive
+Thankless little bitch, for the tears I cried
+Take her down now, don't wanna see her face
+All blistered and burnt, can't hide my disgrace
+
+Twenty-seven, everyone was nice
+Gotta see them, make them pay the price
+See their bodies out on the ice, Take my time
+
+Am I evil? Yes, I am, Am I evil? I am man, yes I am
+
+As I watched my mother die, I lost my head
+Revenge now I sought, to break with my bread
+Takin' no chances, you come with me
+I'll split you to the bone, help set you free
+
+Twenty-seven, everyone was nice
+Gotta see them, make them pay the price
+See their bodies out on the ice, Take my time
+
+Am I evil? Yes, I am, Am I evil? I am man, yes I am
+Oh
+
+[Instrumental Break]
+
+On with the action now, I'll strip your pride
+I'll spread your blood around, I'll see you writhe
+Your face is scarred with steel, wounds deep and neat
+Like a double dozen before you, smells so sweet
+
+Am I evil? Yes, I am, Am I evil? I am man
+
+I'll make my residence, I'll watch your fire
+You can come with me, sweet desire
+My face is long forgot, my face not my own
+Sweet and timely whore, take me home
+
+Am I evil? Yes, I am, Am I evil? I am man
+Go
+
+[Guitar Solo]
+
+My soul is longin' for, await my heir
+Sent to avenge my mother, sweep myself
+My face is long forgot, my face not my own
+Sweet and timely whore, take me home
+
+Am I evil? Yes, I am, Am I evil? I am man
+Am I evil? Yes, I fuckin' am, Am I evil? I am man, yeah`,
+            "eaglesDare": `We walk the streets at night, we go where eagles dare
+They pick up every movement, they pick up every loser
+With jaded eyes and features, you think they really care
+
+I ain't no goddamn son of a bitch, You better think about it, baby x2
+
+An omelet of disease awaits your noontime meal
+Her mouth of germicide seducing all your glands
+
+I ain't no goddamn son of a bitch, You better think about it, baby x2
+
+Let's test your threshold of pain, let's see how long you last
+That tie pin in your retina unbosoms all your past
+With jaded eyes and features, you think they really care
+Let's go where eagles dare, we'll go where eagles dare
+
+I ain't no goddamn son of a bitch  You better think about it, baby x4
+ba- ba- ba- ba- ba- `,
+            "killedByDeath": `If you squeeze my lizard, I'll put my snake on you
+I'm a romantic adventure, And I'm a reptile too
+
+But it don't make no difference,Cause I ain't gonna be easy, easy
+The only time I'm easy's when I'm
+
+Killed by death x3
+Someone
+
+I'm a lone wolf ligger, But I ain't no pretty boy
+I'm a backbone shiver, And I'm a bundle of joy
+
+But it don't make no difference, Cause I ain't gonna be easy, easy
+The only time I'm easy's when I'm
+
+Killed by death x3
+Someone
+Killed by death x3
+Someone's gonna killed by death, someone
+Someone `,
+            "talkDirty": `You know I never, I never seen you look so good
+You never act the way you should
+But I like it, And I know you like it too
+The way that I want you, I gotta have you, Oh yes, I do
+
+You know I never, I never ever stay out late
+You know that I can hardly wait, Just to see you
+And I know you cannot wait,Wait to see me too, I gotta touch you
+
+Cause baby we'll be, At the drive-in
+In the old man's Ford  Behind the bushes
+Till I'm screaming for more  Down the basement
+Lock the cellar door, And baby, Talk dirty to me
+
+You know I call you, I call you on the telephone
+I'm only hoping that you're home, So I can hear you
+When you say those words to me, And whisper so softly
+I gotta hear you
+
+Cause baby we'll be, At the drive-in
+In the old man's Ford
+Behind the bushes, Till I'm screaming for more
+Down the basement  Lock the cellar door
+And baby, Talk dirty to me
+
+C.C. pick up that guitar and talk to me [Guitar Solo]
+
+Cause baby we'll be, At the drive-in
+In the old man's Ford
+Behind them bushes
+Till I'm screaming for more, more, more, more, more
+Down the basement, Lock the cellar door
+And baby, Talk dirty to me, yah
+And baby, Talk dirty to me, yayayah
+And baby, Talk dirty to me, uh, whoo
+That's the way I like it baby, ooh yah `,
+            "blitzkrieg": `lHey! Ho! Let's go! x4
+
+They're formin' in a straight line, They're goin' through a tight wind
+The kids are losin' their minds, The Blitzkrieg Bop
+They're pilin' in the back seat, They're generatin' steam heat
+Pulsatin' to the back beat, The Blitzkrieg Bop
+
+Hey! Ho! Let's go!, Shoot 'em in the back now
+What they want, I don't know, They're all revved up and ready to go
+
+They're formin' in a straight line, They're goin' through a tight wind
+The kids are losin' their minds, The Blitzkrieg Bop
+They're pilin' in the back seat, They're generatin' steam heat
+Pulsatin' to the back beat, The Blitzkrieg Bop
+
+Hey! Ho! Let's go!  Shoot 'em in the back now
+What they want, I don't know, They're all revved up and ready to go
+
+They're formin' in a straight line, They're goin' through a tight wind
+The kids are losin' their minds, The Blitzkrieg Bop
+They're pilin' in the back seat, They're generatin' steam heat
+Pulsatin' to the back beat, The Blitzkrieg Bop
+
+Hey! Ho! Let's go! x4`,
+            "takeItOnTheRun": `Heard it from a friend who, Heard it from a friend who
+Heard it from another, You been messin' around
+
+They say you got a boyfriend, You're out late every weekend
+They're talkin' about you, And it's bringin' me down
+
+But I know the neighborhood, And talk is cheap when the story is good
+And the tales grow taller on down the line
+
+But I'm telling you, babe, That I don't think it's true, babe
+And even if it is keep this in mind
+
+You take it on the run baby, If that's the way you want it baby
+Then I don't want you around
+I don't believe it, Not for a minute
+You're under the gun, So you take it on the run
+
+You're thinking up your white lies, You're puttin' on your bedroom eyes
+You say you're coming home, But you won't say when
+
+But I can feel it comin', If you leave tonight keep runnin'
+And you need never look back again
+
+You take it on the run baby, If that's the way you want it baby
+Then I don't want you around
+I don't believe it  Not for a minute
+You're under the gun  So you take it on the run
+
+[Guitar Solo]
+
+Take it on the run baby, If that's the way you want it baby
+Then I don't want you around
+I don't believe it, Not for a minute
+You're under the gun, So you take it on the run
+Take it on the run baby, If that's the way you want it baby
+Then I don't want you around, I don't believe it
+Not for a minute, You're under the gun
+So you take it on the run
+
+Heard it from a friend who, Heard it from a friend who
+Heard it from another, You been messin' around `,
+            "cycoVision": `You tell me what I wanna hear, I hear it all with my ears
+But that won't do me any use, So I use my eyes to see the truth
+
+I'VE GOT    Cyco Vision 
+I USE       Cyco Vision
+I SEE       Cyco Vision
+I'VE GOT    Cyco Vision
+
+It doesn't matter what you say ... BULLSHIT
+It only matters what you do ... NO SHIT
+You cannot take the easy way out with me
+'cause I got Cyco Vision, Cyco, Vision 
+
+You put a smile on your face... NOT TRUE
+To try and hide behind your lies.. NOT TRUE
+But it just magnifies the pain in your soul
+that I see with my Cyco Vision
+I've got, I've got, got, got, got, got, got
+
+I'VE GOT    Cyco Vision 
+I USE       Cyco Vision
+I SEE       Cyco Vision
+I'VE GOT    Cyco Vision
+
+When you think with all your might… YOU CHANGE 
+You change right to wrong and wrong to right..DON'T CHANGE 
+But it stays the same to me 'cause I got Cyco Vision `,
+            "subliminal": `Flashing pictures on my screen, Shown too quickly to be seen
+Does not register in the conscious mind, Propaganda of another kind
+
+They're fucking with me subliminally x2
+
+Flashing pictures on the screen, Shown too quickly to be seen
+Doesn't register in the conscious mind, Propaganda of another kind
+Danger (Nightmare), Doomsday (Nightmare)
+Murder (Nightmare), Nightmare, nightmare
+Danger (Nightmare), Doomsday (Nightmare)
+Murder (Nightmare), Nightmare, nightmare
+They'll fuck with me subliminally x4
+
+Watching TV, I start to cry, For no reason, I don't know why
+Could it be from messages on my TV, Which I'm getting subliminally?
+
+They're fucking with me subliminally x2
+
+Flashing pictures on the screen, Shown too quickly to be seen
+Doesn't register in the conscious mind, Propaganda of another kind
+Danger (Nightmare), Doomsday (Nightmare)
+Murder (Nightmare), Nightmare, nightmare
+Danger (Nightmare), Doomsday (Nightmare)
+Murder (Nightmare), Nightmare, nightmare
+They'll fuck with me subliminally x4
+
+Mind control, the easiest way, Sponsored by the CIA
+It's a weapon you cannot see, It's propaganda subliminally
+
+They're fucking with me subliminally x2 `,
+            "goodTimesl": `Come on
+
+Listen up everybody, my name is Brian Scott
+This toothbrush and this comb and the blues is all I got
+And I ain't got noone to share this sorrow and woe 
+And I ain't got no money honey, And I ain't never coming home
+
+I'm living for the 
+Good times at the gates of hell x2
+
+You want to know my history, I was born in ‘59
+Raised up on hard liquor, Hard drugs (hard luck) 
+Hard times (hard times) 
+
+Well I've been at this Ohio state prison since 1985
+Locked up on this hike so long, I just wanna die 
+
+I'm dying for the 
+Good times at the gates of hell x3
+
+[Guitar Solo]
+
+When my daddy left, he took the shirts right off our backs
+Beat my momma half to death, Went to prison and never came back
+
+Now I'm all alone, 3 squares and a bed
+When I get out I'm gonna find you, Put a bullet right in your head
+
+Good times at the gates of hell 
+Good times at the gates of hell (Of hell) at the gates
+Good times at the gates of hell
+Good times at the gates of hell`,
+            "seasons": `Razor's edge outlines the dead, Incisions in my head
+Anticipation, the stimulation, To kill the exhilaration
+
+Close your eyes, look deep in your soul
+Step outside yourself and let your mind go
+Frozen eyes stare deep in your mind as you die
+Close your eyes and forget your name
+Step outside yourself and let your thoughts drain
+As you go insane, go insane
+
+Innate seed to watch you bleed, A demanding physical need
+Desecrated, eviscerated, Time's perpetuated
+
+Close your eyes, look deep in your soul
+Step outside yourself and let your mind go
+Frozen eyes stare deep in your mind as you die
+Close your eyes and forget your name
+Step outside yourself and let your thoughts drain
+As you go insane, go insane
+
+[Guitar Solo]
+
+Inert flesh, a bloody tomb, A decorated splatter brightens the room
+An execution, a sadist ritual, Mad intervals of mind residuals
+
+Close your eyes, look deep in your soul
+Step outside yourself and let your mind go
+Frozen eyes stare deep in your mind as you die
+Close your eyes and forget your name
+Step outside yourself and let your thoughts drain
+As you go insane, go insane `,
+            "south": `An unforeseen future nestled somewhere in time
+Unsuspecting victims, no warnings, no signs
+Judgment Day, the Second Coming arrives
+Before you see the light, you must die
+
+Forgotten children conform a new faith
+Avidity and lust controlled by hate
+The never-ending search for your shattered sanity
+Souls of damnation in their own reality
+
+Chaos rampant in an age of distrust
+Confrontations, impulsive habitat
+
+Bastard sons begat your cunting daughters
+Promiscuous mothers with your incestuous fathers
+Ingrate souls condemned for all eternity
+Obtained by immoral observance, a domineering deity
+
+Chaos rampant in an age of distrust
+Confrontations, impulsive sabbath
+
+On and on, south of heaven x4
+
+[Guitar Solo]
+
+The root of all evil is the heart of a black soul
+A force that has lived all eternity
+The never-ending search for a truth never told
+The loss of all hope and your dignity
+
+Chaos rampant in an age of distrust
+Confrontations, impulsive habitat
+
+On and on, south of heaven x4
+
+[Guitar Solo] `,
+            "basketCase": `Do you have the time to listen to me whine
+About nothing and everything all at once
+I am one of those melodramatic fools
+Neurotic to the bone, no doubt about it
+
+Sometimes I give myself the creeps
+Sometimes my mind plays tricks on me
+It all keeps adding up, I think I'm cracking up
+Am I just paranoid?, Or am I just stoned?
+
+I went to a shrink, To analyze my dreams
+She says it's lack of sex that's bringing me down
+I went to a whore, she said my life's a bore
+So quit my whining cause it's bringing her down
+
+Sometimes I give myself the creeps
+Sometimes my mind plays tricks on me
+It all keeps adding up, I think I'm cracking up
+Am I just paranoid?, Or am I just stoned?
+
+A ya-ya-ya
+
+Grasping to control, So I better hold on
+
+Sometimes I give myself the creeps
+Sometimes my mind plays tricks on me
+It all keeps adding up, I think I'm cracking up
+Am I just paranoid?, Or am I just stoned? `,
+            "whenIcomeAround": `I heard you crying loud, all the way across town
+You've been searching for that someone, and it's me out on the prowl
+As you sit around feeling sorry for yourself
+Well, Don't get lonely now and Dry your whining eyes
+I'm just roaming for the moment, Sleazin' my back yard so don't get so uptight
+you been thinking about ditching me, No time to search the world around
+Cause you know where I'll be found, When I come around
+
+I heard it all before, So don't knock down my door
+I'm a loser and a user so I don't need no accuser
+to try and slag me down because I know I'm right
+So go do what you like, Make sure you do it wise
+You may find out that your self doubt means nothing was ever there
+
+You can't go forcing something if it's just not right
+
+No time to search the world around  Cause you know where I'll be found
+When I come around…. Hooh
+
+[Guitar solo]
+
+No time to search the world around, Cause you know where I'll be found
+When I come around x4 `,
+            "fight4Right": `Yeah
+Kick it
+
+You wake up late for school, man, you don't wanna go
+You ask your mom, "Please?", but she still says, "No!"
+You missed two classes and no homework
+But your teacher preaches class like you're some kind of *jerk*
+
+You gotta fight, for your right, To party
+
+Your pop's caught you smokin', man, he says, "No way!"
+That hypocrite smokes two packs a day
+Man, livin' at home is such a drag
+Now your mom threw away your best porno mag (Busted)
+
+You gotta fight, for your right, To party
+You gotta fight
+
+[Guitar Solo]
+
+Don't step out of this house if that's the clothes you're gonna wear
+I'll kick you out of my home if you don't cut that hair
+Your mom busted in and said, "What's that noise?"
+Aw, Mom, you're just jealous, it's the Beastie Boys
+
+You gotta fight, for your right, To party x2
+Party
+Party `,
+            "loveGun": `I really love you, baby, I love what you got
+Let's get together, we can, Get hot
+
+No more tomorrow, baby, Time is today
+Girl, I can make you feel, Okay
+
+No place for hiding, baby, No place to run
+You pull the trigger of my
+
+Love gun, (Love gun) love gun x2
+
+You can't forget me, baby, Don't try to lie
+You'll never leave me, mama, So don't try
+
+I'll be a gambler, baby, Lay down the bet
+We get together, mama, You'll sweat
+
+No place for hiding, baby, No place to run
+You pull the trigger of my
+
+Love gun, (Love gun) love gun x2
+
+(Love gun)
+(Love gun)
+
+[Guitar solo]
+
+Love gun, (Love gun) love gun x2
+
+Love gun (Love gun) x4
+love gun `,
+            "detroit": `I feel uptight on a Saturday night
+Nine o'clock, the radio's the only light
+I hear my song, and it pulls me through
+Comes on strong, tells me what I got to do
+I got to
+
+Get up!, Everybody's gonna move their feet
+Get down!, Everybody's gonna leave their seat
+You gotta lose your mind in Detroit Rock City
+Get up!, Everybody's gonna move their feet
+Get down!, Everybody's gonna leave their seat
+
+Getting late, I just can't wait
+Ten o'clock and I know I gotta hit the road
+First I drink, then I smoke
+Start the car and I try to make the midnight show
+
+Get up!, Everybody's gonna move their feet
+Get down!, Everybody's gonna leave their seat
+
+Moving fast, down 95
+Hit top speed, but I'm still moving much too slow
+I feel so good, I'm so alive
+Hear my song playing on the radio, it goes
+
+Get up!, Everybody's gonna move their feet
+Get down!, Everybody's gonna leave their seat
+
+Twelve o'clock, I gotta rock
+There's a truck ahead, lights staring at my eyes
+Oh my God, no time to turn
+I got to laugh 'cause I know I'm gonna die
+Why?
+
+Get up!, Everybody's gonna move their feet
+Get up!, Everybody's gonna leave their seat
+Get up `,
+            "aintLikeThat": `There I was, laid out on a table
+Screamin' sweat and bare feet to the floor
+In my life, I'd not soften
+Things that cut, and burn so often
+But I sit, think of somethin'
+Scared to face, the dyin' nothin'
+
+See the cycle I've waited for, It ain't like that anymore
+
+Where I go is when I feel I'm able
+How I fight is why I'm feelin' sore
+In my mind, not forgotten
+Feel as though, a tooth were rotten
+Behind the smile, a tongue that's slippin'
+Buzzards cry, when flesh is rippin'
+
+See the cycle I've waited for, It ain't like that anymore
+
+[Guitar Solo]
+
+Here I sit writing on the paper
+Trying to think of words you can't ignore
+In my eyes, what I'm lacking
+Score at face, a ten for slacking
+Sign the deal, set in motion
+Smaller fish, so huge the ocean
+
+See the cycle I've waited for, It ain't like that anymore  `,
+            "talkDirty": `You know I never, I never seen you look so good
+You never act the way you should
+But I like it, And I know you like it too
+The way that I want you, I gotta have you, Oh yes, I do
+
+You know I never, I never ever stay out late
+You know that I can hardly wait, Just to see you
+And I know you cannot wait, Wait to see me too, I gotta touch you
+
+Cause baby we'll be, At the drive-in
+In the old man's Ford, Behind the bushes
+Till I'm screaming for more, Down the basement
+Lock the cellar door And baby, Talk dirty to me
+
+You know I call you, I call you on the telephone
+I'm only hoping that you're home So I can hear you
+When you say those words to me, And whisper so softly
+I gotta hear you
+
+Cause baby we'll be, At the drive-in
+In the old man's Ford, Behind the bushes
+Till I'm screaming for more, Down the basement
+Lock the cellar door And baby, Talk dirty to me
+
+C.C. pick up that guitar and talk to me [Guitar Solo]
+
+Cause baby we'll be, At the drive-in
+In the old man's Ford, Behind them bushes
+Till I'm screaming for more, more, more, more, more
+Down the basement, Lock the cellar door
+And baby, Talk dirty to me, yah
+And baby, Talk dirty to me, yayayah
+And baby, Talk dirty to me, uh, whoo
+That's the way I like it baby, ooh yah  `,
+            "ThingCalledLove": `Can't explain all the feelings that you're making me feel, 
+My heart's in overdrive and you're behind the steering wheel
+Touching you, touching me, Touching you, God you're touching me
+
+I believe in a thing called love, Just listen to the rhythm of my heart
+There's a chance we could make it now, We'll be rocking 'til the sun goes down
+I believe in a thing called love, Ooh!
+
+I wanna kiss you every minute, every hour, every day
+You got me in a spin but everything is A.OK!
+
+Touching you, touching me, Touching you, God you're touching me
+
+I believe in a thing called love, Just listen to the rhythm of my heart
+There's a chance we could make it now, We'll be rocking 'til the sun goes down
+I believe in a thing called love, Ooh! Guitar!
+
+Touching you, touching me, Touching you, God you're touching me
+
+I believe in a thing called love, Just listen to the rhythm of my heart
+There's a chance we could make it now, We'll be rocking 'til the sun goes down
+I believe in a thing called love, Ooh! `,
+        }
+
+        const linksData1 = [
+            { name: "Lifestyles of the Rich and Famous", url: "lifestyles" },
+            { name: "Dig In", url: "digIn" },
+            { name: "Son of a Bitch", url: "sob" },
+            { name: "All the Small Things", url: "allTheSmallThings" },
+            { name: "I Believe in a Thing Called Love", url: "thingCalledLove" },
+            { name: "Java Junkie", url: "java" },
+            { name: "General Contractor", url: "generalContractor" },
+            { name: "Big Air is God", url: "bigAir" },
+            { name: "Sonics Dance Team Girl", url: "sonicsGirl" },
+            { name: "Monkey Wrench", url: "monkeyWrench" },
+            { name: "Three Little Pigs", url: "3LittlePigs" },
+            { name: "See You in Hell", url: "seeYouInHell" },
+            { name: "22 Acacia Avenue", url: "22Acacia" },
+            { name: "The Trooper", url: "trooper" },
+            { name: "Breaking the Law", url: "breakingLaw" },
+            { name: "Grinder", url: "grinder" },
+            { name: "My Own Worst Enemy", url: "myOwnWorst" },
+            { name: "Metal Church", url: "metalChurch" },
+            { name: "Seek and Destroy", url: "seekAndDestroy" },
+            { name: "For Whom the Bell Tolls", url: "bellTolls" },
+            { name: "Am I Evil", url: "amIEvil" },
+            { name: "Where Eagles Dare", url: "eaglesDare" },
+            { name: "Killed by Death", url: "killedByDeath" },
+            { name: "Blitzkrieg Bop", url: "blitzkrieg" },
+            { name: "Take it on the Run", url: "takeItOnTheRun" },
+            { name: "Cyco Vision", url: "cycoVision" },
+            { name: "Subliminal", url: "subliminal" },
+            { name: "Good Times at the Gates of Hell", url: "goodTimesl" },
+        ];
+
+        const linksData2 = [
+           { name: "Seasons in the Abyss", url: "seasons" },
+           { name: "South of Heaven", url: "south" },
+           { name: "Basket Case", url: "basketCase" },
+           { name: "When I Come Around", url: "whenIcomeAround" },
+           { name: "Fight for Your Right", url: "fight4Right" },
+           { name: "Love Gun", url: "loveGun" },
+           { name: "Detroit Rock City", url: "detroit" },
+           { name: "It Ain't Like That", url: "aintLikeThat" },
+           { name: "Talk Dirty to Me", url: "talkDirty" },
+        ];
+
+        function shuffleArray(array) {
+            const shuffledArray = [...array];
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            }
+            return shuffledArray;
+        }
+
+        function renderLinks(ulId, originalData) {
+            const ulElement = document.getElementById(ulId);
+            ulElement.innerHTML = '';
+
+            const randomizedLinks = shuffleArray(originalData);
+
+            randomizedLinks.forEach(link => {
+                const listItem = document.createElement('li');
+                const anchor = document.createElement('a');
+
+                anchor.textContent = link.name;
+
+                anchor.onclick = (event) => {
+                    event.preventDefault();
+                    displayLyrics(link.url, link.name);
+                };
+
+                listItem.appendChild(anchor);
+                ulElement.appendChild(listItem);
+            });
+        }
+
+        function displayLyrics(lyricsKey, songName) {
+            const lyricsDisplayArea = document.getElementById('lyricsDisplay');
+            const lyricsTitle = document.getElementById('lyricsTitle');
+            const lyricsContentArea = document.getElementById('lyricsContentArea');
+
+            lyricsTitle.textContent = songName;
+
+            if (lyricsData[lyricsKey]) {
+                lyricsContentArea.innerHTML = `<pre>${lyricsData[lyricsKey]}</pre>`;
+            } else {
+                lyricsContentArea.innerHTML = `<pre>Lyrics not found for this song.</pre>`;
+            }
+
+            lyricsDisplayArea.style.display = 'block';
+            lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLinks('linkList1', linksData1);
+            renderLinks('linkList2', linksData2);
+
+            document.getElementById('randomizeBtn1').addEventListener('click', () => {
+                renderLinks('linkList1', linksData1);
+            });
+
+            document.getElementById('randomizeBtn2').addEventListener('click', () => {
+                renderLinks('linkList2', linksData2);
+            });
+        });
+    </script>
+</body>
+</html>
