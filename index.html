@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click Song/Scroll Up</title>
+    <title>Randomized Clickable Links</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -80,14 +80,14 @@
         #lyricsContentArea pre {
             margin-top: 0;
             margin-bottom: 0;
-            font-weight: 900; /* Attempting maximum pure boldness */
-            filter: brightness(0.4) contrast(2.5); /* Aggressive visual boldness */
-            color: black; /* Ensure color is not washed out */
-            white-space: pre-wrap; /* Respects manual line breaks and wraps long lines */
-            word-wrap: break-word; /* Older property for word wrapping */
-            word-break: break-word; /* Forces words to break if they are too long */
-            overflow-wrap: break-word; /* Modern equivalent for word-wrap */
-            hyphens: auto; /* Allow hyphenation for better wrapping */
+            font-weight: 900;
+            filter: brightness(0.4) contrast(2.5);
+            color: black;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
         }
         .lyrics-content {
             display: none;
@@ -96,25 +96,7 @@
             display: block;
         }
     </style>
-</head>
-<body>
-    <h1>Normal</h1>
-    <button id="randomizeBtn1">Randomize</button>
-    <ul id="linkList1">
-        </ul>
-
-    <h2>Halfstep</h2>
-    <button id="randomizeBtn2">Randomize</button>
-    <ul id="linkList2">
-        </ul>
-
-    <div id="lyricsDisplay">
-        <h3 id="lyricsTitle"></h3>
-        <div id="lyricsContentArea">
-            </div>
-    </div>
-    
-    <script>
+    <script defer>
         const lyricsData = {
             "lifestyles": `Always see it on TV, Or read it in the magazines
 Celebrities want sympathy, All they do is piss and moan
@@ -1336,7 +1318,6 @@ I believe in a thing called love, Just listen to the rhythm of my heart
 There's a chance we could make it now, We'll be rocking 'til the sun goes down
 I believe in a thing called love, Ooh! `,
         }
-
         const linksData1 = [
             { name: "Lifestyles of the Rich and Famous", url: "lifestyles" },
             { name: "Dig In", url: "digIn" },
@@ -1416,7 +1397,7 @@ I believe in a thing called love, Ooh! `,
             const lyricsTitle = document.getElementById('lyricsTitle');
             const lyricsContentArea = document.getElementById('lyricsContentArea');
 
-            lyricsTitle.textContent = songName;
+            lyricsTitle.textContent = songName; 
 
             if (lyricsData[lyricsKey]) {
                 lyricsContentArea.innerHTML = `<pre>${lyricsData[lyricsKey]}</pre>`;
@@ -1441,5 +1422,22 @@ I believe in a thing called love, Ooh! `,
             });
         });
     </script>
+</head>
+<body>
+    <h1>Normal</h1>
+    <button id="randomizeBtn1">Randomize</button>
+    <ul id="linkList1">
+        </ul>
+
+    <h2>Halfstep</h2>
+    <button id="randomizeBtn2">Randomize</button>
+    <ul id="linkList2">
+        </ul>
+
+    <div id="lyricsDisplay">
+        <h3 id="lyricsTitle"></h3>
+        <div id="lyricsContentArea">
+            </div>
+    </div>
 </body>
 </html>
