@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Randomized Clickable Links</title>
+    <title>Set Mix + Lyrics</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -111,6 +111,14 @@
         }
         #nextSongBtn:hover {
             background-color: #218838;
+        }
+        #endOfSetMessage {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #dc3545;
+            text-align: center;
+            display: none;
         }
     </style>
     <script defer>
@@ -1335,7 +1343,7 @@ I believe in a thing called love, Just listen to the rhythm of my heart
 There's a chance we could make it now, We'll be rocking 'til the sun goes down
 I believe in a thing called love, Ooh! `,
         }
-        const linksData1 = [
+        const linksData1_original = [
             { name: "Lifestyles of the Rich and Famous", url: "lifestyles" },
             { name: "Dig In", url: "digIn" },
             { name: "Son of a Bitch", url: "sob" },
@@ -1366,7 +1374,7 @@ I believe in a thing called love, Ooh! `,
             { name: "Good Times at the Gates of Hell", url: "goodTimesl" },
         ];
 
-        const linksData2 = [
+        const linksData2_original = [
            { name: "Seasons in the Abyss", url: "seasons" },
            { name: "South of Heaven", url: "south" },
            { name: "Basket Case", url: "basketCase" },
@@ -1378,11 +1386,17 @@ I believe in a thing called love, Ooh! `,
            { name: "Talk Dirty to Me", url: "talkDirty" },
         ];
 
-        let currentRandomizedList = [];
-        let currentIndex = -1;
+
+        // These will hold the CURRENTLY randomized versions of the lists
+        let linksData1_shuffled = [];
+        let linksData2_shuffled = [];
+
+        // This will be the combined list used by the "Next Song" button
+        let currentPlaybackList = [];
+        let currentPlaybackIndex = -1;
 
         function shuffleArray(array) {
-            const shuffledArray = [...array];
+            const shuffledArray = [...array]; // Create a shallow copy to avoid modifying the original
             for (let i = shuffledArray.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
@@ -1390,25 +1404,31 @@ I believe in a thing called love, Ooh! `,
             return shuffledArray;
         }
 
-        function renderLinks(ulId, originalData) {
+        // Renders a list in the HTML and stores its shuffled version
+        function renderAndStoreShuffledList(ulId, originalData, storeIntoVariable) {
             const ulElement = document.getElementById(ulId);
             ulElement.innerHTML = '';
 
-            const randomizedLinks = shuffleArray(originalData);
+            const shuffledData = shuffleArray(originalData);
+            // Store the shuffled version for later playback
+            if (storeIntoVariable === 'linksData1_shuffled') {
+                linksData1_shuffled = shuffledData;
+            } else if (storeIntoVariable === 'linksData2_shuffled') {
+                linksData2_shuffled = shuffledData;
+            }
 
-            randomizedLinks.forEach((link, index) => {
+            shuffledData.forEach((link, index) => {
                 const listItem = document.createElement('li');
                 const anchor = document.createElement('a');
-
                 anchor.textContent = link.name;
-
                 anchor.onclick = (event) => {
                     event.preventDefault();
-                    currentRandomizedList = randomizedLinks;
-                    currentIndex = index;
+                    // When a song is clicked, rebuild the playback list from the current shuffled states
+                    // and set the current index to the clicked song.
+                    currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                    currentPlaybackIndex = currentPlaybackList.findIndex(item => item.url === link.url);
                     displayLyrics(link.url, link.name);
                 };
-
                 listItem.appendChild(anchor);
                 ulElement.appendChild(listItem);
             });
@@ -1419,6 +1439,7 @@ I believe in a thing called love, Ooh! `,
             const lyricsTitle = document.getElementById('lyricsTitle');
             const lyricsContentArea = document.getElementById('lyricsContentArea');
             const nextSongBtn = document.getElementById('nextSongBtn');
+            const endOfSetMessage = document.getElementById('endOfSetMessage');
 
             lyricsTitle.textContent = songName;
 
@@ -1428,6 +1449,8 @@ I believe in a thing called love, Ooh! `,
                 lyricsContentArea.innerHTML = `<pre>Lyrics not found for this song.</pre>`;
             }
 
+            // Always hide end message and show next button when a song is displayed
+            endOfSetMessage.style.display = 'none';
             nextSongBtn.style.display = 'inline-block';
 
             // Ensure the lyrics display is visible
@@ -1437,36 +1460,55 @@ I believe in a thing called love, Ooh! `,
             lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             // Also, ensure the internal content of the lyrics display scrolls to the top
-            // This is for when new lyrics are loaded into an *already visible* lyricsDisplayArea
             lyricsDisplayArea.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function loadNextSong() {
-            if (currentRandomizedList.length > 0) {
-                currentIndex = (currentIndex + 1) % currentRandomizedList.length;
-                const nextSong = currentRandomizedList[currentIndex];
+            currentPlaybackIndex++; // Move to the next index in the currentPlaybackList
+
+            const nextSongBtn = document.getElementById('nextSongBtn');
+            const endOfSetMessage = document.getElementById('endOfSetMessage');
+            const lyricsDisplayArea = document.getElementById('lyricsDisplay');
+            const lyricsTitle = document.getElementById('lyricsTitle');
+            const lyricsContentArea = document.getElementById('lyricsContentArea');
+
+            if (currentPlaybackIndex < currentPlaybackList.length) {
+                const nextSong = currentPlaybackList[currentPlaybackIndex];
                 displayLyrics(nextSong.url, nextSong.name);
+            } else {
+                // End of the set
+                nextSongBtn.style.display = 'none'; // Hide the next button
+                lyricsTitle.textContent = ''; // Clear title
+                lyricsContentArea.innerHTML = ''; // Clear lyrics content
+                endOfSetMessage.style.display = 'block'; // Show end of set message
+
+                // Ensure the lyrics display is still visible and scroll to top for message
+                lyricsDisplayArea.style.display = 'block';
+                lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderLinks('linkList1', linksData1);
-            renderLinks('linkList2', linksData2);
+            // Initial render and shuffle for both lists
+            renderAndStoreShuffledList('linkList1', linksData1_original, 'linksData1_shuffled');
+            renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
 
             document.getElementById('randomizeBtn1').addEventListener('click', () => {
-                currentRandomizedList = [];
-                currentIndex = -1;
+                renderAndStoreShuffledList('linkList1', linksData1_original, 'linksData1_shuffled');
+                // Hide lyrics and button if visible, as the list order has changed
                 document.getElementById('nextSongBtn').style.display = 'none';
                 document.getElementById('lyricsDisplay').style.display = 'none';
-                renderLinks('linkList1', linksData1);
+                document.getElementById('endOfSetMessage').style.display = 'none';
+                currentPlaybackIndex = -1; // Reset index for fresh start
             });
 
             document.getElementById('randomizeBtn2').addEventListener('click', () => {
-                currentRandomizedList = [];
-                currentIndex = -1;
+                renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
+                // Hide lyrics and button if visible
                 document.getElementById('nextSongBtn').style.display = 'none';
                 document.getElementById('lyricsDisplay').style.display = 'none';
-                renderLinks('linkList2', linksData2);
+                document.getElementById('endOfSetMessage').style.display = 'none';
+                currentPlaybackIndex = -1; // Reset index for fresh start
             });
 
             document.getElementById('nextSongBtn').addEventListener('click', loadNextSong);
@@ -1489,6 +1531,7 @@ I believe in a thing called love, Ooh! `,
         <div id="lyricsContentArea">
             </div>
         <button id="nextSongBtn" style="display: none;">Next Song</button>
+        <div id="endOfSetMessage" style="display: none;">End of Set</div>
     </div>
 </body>
 </html>
