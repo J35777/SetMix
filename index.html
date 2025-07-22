@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click Song/Scroll Up</title>
+    <title>Randomized Clickable Links</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -66,7 +66,7 @@
         }
         #lyricsDisplay h3 {
             margin-top: 0;
-            margin-bottom: 0;
+            margin-bottom: 10px;
             color: #0056b3;
             font-size: 1.5em;
         }
@@ -88,12 +88,29 @@
             word-break: break-word;
             overflow-wrap: break-word;
             hyphens: auto;
+            overflow-y: auto;
+            max-height: calc(95vh - 120px);
         }
         .lyrics-content {
             display: none;
         }
         .lyrics-content.active {
             display: block;
+        }
+        #nextSongBtn {
+            padding: 5px 10px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #nextSongBtn:hover {
+            background-color: #218838;
         }
     </style>
     <script defer>
@@ -1361,6 +1378,9 @@ I believe in a thing called love, Ooh! `,
            { name: "Talk Dirty to Me", url: "talkDirty" },
         ];
 
+        let currentRandomizedList = [];
+        let currentIndex = -1;
+
         function shuffleArray(array) {
             const shuffledArray = [...array];
             for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -1376,7 +1396,7 @@ I believe in a thing called love, Ooh! `,
 
             const randomizedLinks = shuffleArray(originalData);
 
-            randomizedLinks.forEach(link => {
+            randomizedLinks.forEach((link, index) => {
                 const listItem = document.createElement('li');
                 const anchor = document.createElement('a');
 
@@ -1384,6 +1404,8 @@ I believe in a thing called love, Ooh! `,
 
                 anchor.onclick = (event) => {
                     event.preventDefault();
+                    currentRandomizedList = randomizedLinks;
+                    currentIndex = index;
                     displayLyrics(link.url, link.name);
                 };
 
@@ -1396,8 +1418,9 @@ I believe in a thing called love, Ooh! `,
             const lyricsDisplayArea = document.getElementById('lyricsDisplay');
             const lyricsTitle = document.getElementById('lyricsTitle');
             const lyricsContentArea = document.getElementById('lyricsContentArea');
+            const nextSongBtn = document.getElementById('nextSongBtn');
 
-            lyricsTitle.textContent = songName; 
+            lyricsTitle.textContent = songName;
 
             if (lyricsData[lyricsKey]) {
                 lyricsContentArea.innerHTML = `<pre>${lyricsData[lyricsKey]}</pre>`;
@@ -1405,8 +1428,25 @@ I believe in a thing called love, Ooh! `,
                 lyricsContentArea.innerHTML = `<pre>Lyrics not found for this song.</pre>`;
             }
 
+            nextSongBtn.style.display = 'inline-block';
+
+            // Ensure the lyrics display is visible
             lyricsDisplayArea.style.display = 'block';
+
+            // Scroll the main page to bring the lyrics display to the top of the viewport
             lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Also, ensure the internal content of the lyrics display scrolls to the top
+            // This is for when new lyrics are loaded into an *already visible* lyricsDisplayArea
+            lyricsDisplayArea.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function loadNextSong() {
+            if (currentRandomizedList.length > 0) {
+                currentIndex = (currentIndex + 1) % currentRandomizedList.length;
+                const nextSong = currentRandomizedList[currentIndex];
+                displayLyrics(nextSong.url, nextSong.name);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1414,12 +1454,22 @@ I believe in a thing called love, Ooh! `,
             renderLinks('linkList2', linksData2);
 
             document.getElementById('randomizeBtn1').addEventListener('click', () => {
+                currentRandomizedList = [];
+                currentIndex = -1;
+                document.getElementById('nextSongBtn').style.display = 'none';
+                document.getElementById('lyricsDisplay').style.display = 'none';
                 renderLinks('linkList1', linksData1);
             });
 
             document.getElementById('randomizeBtn2').addEventListener('click', () => {
+                currentRandomizedList = [];
+                currentIndex = -1;
+                document.getElementById('nextSongBtn').style.display = 'none';
+                document.getElementById('lyricsDisplay').style.display = 'none';
                 renderLinks('linkList2', linksData2);
             });
+
+            document.getElementById('nextSongBtn').addEventListener('click', loadNextSong);
         });
     </script>
 </head>
@@ -1438,6 +1488,7 @@ I believe in a thing called love, Ooh! `,
         <h3 id="lyricsTitle"></h3>
         <div id="lyricsContentArea">
             </div>
+        <button id="nextSongBtn" style="display: none;">Next Song</button>
     </div>
 </body>
 </html>
