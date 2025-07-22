@@ -61,6 +61,69 @@
             max-height: 95vh;
             overflow-y: auto;
             display: none;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Mix + Lyrics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1, h2 {
+            color: #0056b3;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        button {
+            padding: 8px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        li {
+            margin-bottom: 10px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #lyricsDisplay {
+            margin-top: 4px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            min-height: 95vh;
+            max-height: 95vh;
+            overflow-y: auto;
+            display: none;
             box-sizing: border-box;
             width: 100%;
         }
@@ -97,11 +160,12 @@
         .lyrics-content.active {
             display: block;
         }
-        #nextSongBtn {
+        #backSongBtn, #nextSongBtn {
             padding: 5px 10px;
             font-size: 0.9em;
             display: inline-block;
             margin-top: 20px;
+            margin-right: 10px; /* Space between buttons */
             background-color: #28a745;
             color: white;
             border: none;
@@ -109,7 +173,7 @@
             cursor: pointer;
             transition: background-color 0.2s;
         }
-        #nextSongBtn:hover {
+        #backSongBtn:hover, #nextSongBtn:hover {
             background-color: #218838;
         }
         #endOfSetMessage {
@@ -1505,13 +1569,198 @@ I believe in a thing called love, Ooh! `,
             document.getElementById('randomizeBtn2').addEventListener('click', () => {
                 renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
                 // Hide lyrics and button if visible
+       const linksData1_original = [
+            { name: "Lifestyles of the Rich and Famous", url: "lifestyles" },
+            { name: "Dig In", url: "digIn" },
+            { name: "Son of a Bitch", url: "sob" },
+            { name: "All the Small Things", url: "allTheSmallThings" },
+            { name: "I Believe in a Thing Called Love", url: "ThingCalledLove" },
+            { name: "Java Junkie", url: "java" },
+            { name: "General Contractor", url: "generalContractor" },
+            { name: "Big Air is God", url: "bigAir" },
+            { name: "Sonics Dance Team Girl", url: "sonicsGirl" },
+            { name: "Monkey Wrench", url: "monkeyWrench" },
+            { name: "Three Little Pigs", url: "3LittlePigs" },
+            { name: "See You in Hell", url: "seeYouInHell" },
+            { name: "22 Acacia Avenue", url: "22Acacia" },
+            { name: "The Trooper", url: "trooper" },
+            { name: "Breaking the Law", url: "breakingLaw" },
+            { name: "Grinder", url: "grinder" },
+            { name: "My Own Worst Enemy", url: "myOwnWorst" },
+            { name: "Metal Church", url: "metalChurch" },
+            { name: "Seek and Destroy", url: "seekAndDestroy" },
+            { name: "For Whom the Bell Tolls", url: "bellTolls" },
+            { name: "Am I Evil", url: "amIEvil" },
+            { name: "Where Eagles Dare", url: "eaglesDare" },
+            { name: "Killed by Death", url: "killedByDeath" },
+            { name: "Blitzkrieg Bop", url: "blitzkrieg" },
+            { name: "Take it on the Run", url: "takeItOnTheRun" },
+            { name: "Cyco Vision", url: "cycoVision" },
+            { name: "Subliminal", url: "subliminal" },
+            { name: "Good Times at the Gates of Hell", url: "goodTimesl" },
+        ];
+
+        const linksData2_original = [
+           { name: "Seasons in the Abyss", url: "seasons" },
+           { name: "South of Heaven", url: "south" },
+           { name: "Basket Case", url: "basketCase" },
+           { name: "When I Come Around", url: "whenIcomeAround" },
+           { name: "Fight for Your Right", url: "fight4Right" },
+           { name: "Love Gun", url: "loveGun" },
+           { name: "Detroit Rock City", url: "detroit" },
+           { name: "It Ain't Like That", url: "aintLikeThat" },
+           { name: "Talk Dirty to Me", url: "talkDirty" },
+        ];
+
+
+        // These will hold the CURRENTLY randomized versions of the lists
+        let linksData1_shuffled = [];
+        let linksData2_shuffled = [];
+
+        // This will be the combined list used by the "Next Song" button
+        let currentPlaybackList = [];
+        let currentPlaybackIndex = -1;
+
+        function shuffleArray(array) {
+            const shuffledArray = [...array]; // Create a shallow copy to avoid modifying the original
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            }
+            return shuffledArray;
+        }
+
+        // Renders a list in the HTML and stores its shuffled version
+        function renderAndStoreShuffledList(ulId, originalData, storeIntoVariable) {
+            const ulElement = document.getElementById(ulId);
+            ulElement.innerHTML = '';
+
+            const shuffledData = shuffleArray(originalData);
+            // Store the shuffled version for later playback
+            if (storeIntoVariable === 'linksData1_shuffled') {
+                linksData1_shuffled = shuffledData;
+            } else if (storeIntoVariable === 'linksData2_shuffled') {
+                linksData2_shuffled = shuffledData;
+            }
+
+            shuffledData.forEach((link, index) => {
+                const listItem = document.createElement('li');
+                const anchor = document.createElement('a');
+                anchor.textContent = link.name;
+                anchor.onclick = (event) => {
+                    event.preventDefault();
+                    // When a song is clicked, rebuild the playback list from the current shuffled states
+                    // and set the current index to the clicked song.
+                    currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                    currentPlaybackIndex = currentPlaybackList.findIndex(item => item.url === link.url);
+                    displayLyrics(link.url, link.name);
+                };
+                listItem.appendChild(anchor);
+                ulElement.appendChild(listItem);
+            });
+        }
+
+        function displayLyrics(lyricsKey, songName) {
+            const lyricsDisplayArea = document.getElementById('lyricsDisplay');
+            const lyricsTitle = document.getElementById('lyricsTitle');
+            const lyricsContentArea = document.getElementById('lyricsContentArea');
+            const nextSongBtn = document.getElementById('nextSongBtn');
+            const backSongBtn = document.getElementById('backSongBtn'); // Get back button
+            const endOfSetMessage = document.getElementById('endOfSetMessage');
+
+            lyricsTitle.textContent = songName;
+
+            if (lyricsData[lyricsKey]) {
+                lyricsContentArea.innerHTML = `<pre>${lyricsData[lyricsKey]}</pre>`;
+            } else {
+                lyricsContentArea.innerHTML = `<pre>Lyrics not found for this song.</pre>`;
+            }
+
+            // Always hide end message and show buttons when a song is displayed
+            endOfSetMessage.style.display = 'none';
+            nextSongBtn.style.display = 'inline-block';
+            backSongBtn.style.display = 'inline-block'; // Show back button
+
+            // Disable back button if at the start of the list
+            if (currentPlaybackIndex <= 0) {
+                backSongBtn.disabled = true;
+            } else {
+                backSongBtn.disabled = false;
+            }
+
+            // Disable next button if at the end of the list
+            if (currentPlaybackIndex >= currentPlaybackList.length - 1) {
+                nextSongBtn.disabled = true;
+            } else {
+                nextSongBtn.disabled = false;
+            }
+
+            // Ensure the lyrics display is visible
+            lyricsDisplayArea.style.display = 'block';
+
+            // Scroll the main page to bring the lyrics display to the top of the viewport
+            lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Also, ensure the internal content of the lyrics display scrolls to the top
+            lyricsDisplayArea.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function loadNextSong() {
+            currentPlaybackIndex++; // Move to the next index in the currentPlaybackList
+            if (currentPlaybackIndex < currentPlaybackList.length) {
+                const nextSong = currentPlaybackList[currentPlaybackIndex];
+                displayLyrics(nextSong.url, nextSong.name);
+            } else {
+                // End of the set
                 document.getElementById('nextSongBtn').style.display = 'none';
+                document.getElementById('backSongBtn').style.display = 'none'; // Hide back button too
+                document.getElementById('lyricsTitle').textContent = '';
+                document.getElementById('lyricsContentArea').innerHTML = '';
+                document.getElementById('endOfSetMessage').style.display = 'block';
+
+                document.getElementById('lyricsDisplay').style.display = 'block';
+                document.getElementById('lyricsDisplay').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function loadPreviousSong() {
+            currentPlaybackIndex--; // Move to the previous index
+            if (currentPlaybackIndex >= 0) {
+                const prevSong = currentPlaybackList[currentPlaybackIndex];
+                displayLyrics(prevSong.url, prevSong.name);
+            } else {
+                // At the beginning of the set, disable back button or handle as needed
+                document.getElementById('backSongBtn').disabled = true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial render and shuffle for both lists
+            renderAndStoreShuffledList('linkList1', linksData1_original, 'linksData1_shuffled');
+            renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
+
+            document.getElementById('randomizeBtn1').addEventListener('click', () => {
+                renderAndStoreShuffledList('linkList1', linksData1_original, 'linksData1_shuffled');
+                // Hide lyrics and buttons if visible, as the list order has changed
+                document.getElementById('nextSongBtn').style.display = 'none';
+                document.getElementById('backSongBtn').style.display = 'none';
+                document.getElementById('lyricsDisplay').style.display = 'none';
+                document.getElementById('endOfSetMessage').style.display = 'none';
+                currentPlaybackIndex = -1; // Reset index for fresh start
+            });
+
+            document.getElementById('randomizeBtn2').addEventListener('click', () => {
+                renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
+                // Hide lyrics and buttons if visible
+                document.getElementById('nextSongBtn').style.display = 'none';
+                document.getElementById('backSongBtn').style.display = 'none';
                 document.getElementById('lyricsDisplay').style.display = 'none';
                 document.getElementById('endOfSetMessage').style.display = 'none';
                 currentPlaybackIndex = -1; // Reset index for fresh start
             });
 
             document.getElementById('nextSongBtn').addEventListener('click', loadNextSong);
+            document.getElementById('backSongBtn').addEventListener('click', loadPreviousSong); // Add event listener for back button
         });
     </script>
 </head>
@@ -1530,8 +1779,7 @@ I believe in a thing called love, Ooh! `,
         <h3 id="lyricsTitle"></h3>
         <div id="lyricsContentArea">
             </div>
-        <button id="nextSongBtn" style="display: none;">Next Song</button>
-        <div id="endOfSetMessage" style="display: none;">End of Set</div>
+        <button id="backSongBtn" style="display: none;">&lt;</button> <button id="nextSongBtn" style="display: none;">Next</button> <div id="endOfSetMessage" style="display: none;">End of Set</div>
     </div>
 </body>
 </html>
