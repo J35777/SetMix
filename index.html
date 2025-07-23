@@ -60,9 +60,10 @@
             min-height: 95vh;
             max-height: 95vh;
             overflow-y: auto;
-            display: none;
+            display: none; /* Keep hidden by default */
             box-sizing: border-box;
             width: 100%;
+            position: relative; /* For potential centering of end message */
         }
         #lyricsDisplay h3 {
             margin-top: 0;
@@ -97,7 +98,7 @@
         .lyrics-content.active {
             display: block;
         }
-        #backSongBtn, #nextSongBtn {
+        .nav-buttons {
             padding: 5px 10px;
             font-size: 0.9em;
             display: inline-block;
@@ -110,16 +111,22 @@
             cursor: pointer;
             transition: background-color 0.2s;
         }
-        #backSongBtn:hover, #nextSongBtn:hover {
+        .nav-buttons:hover {
             background-color: #218838;
         }
-        #endOfSetMessage {
-            margin-top: 20px;
-            font-size: 1.2em;
+        /* Style for the end of set message when it's the only content */
+        .end-of-set-message {
+            font-size: 1.8em; /* Make it larger */
             font-weight: bold;
             color: #dc3545;
             text-align: center;
-            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%; /* Occupy more width */
+            box-sizing: border-box;
+            padding: 20px;
         }
     </style>
     <script defer>
@@ -1354,7 +1361,7 @@ I believe in a thing called love, Ooh! `,
             { name: "General Contractor", url: "generalContractor" },
             { name: "Big Air is God", url: "bigAir" },
             { name: "Sonics Dance Team Girl", url: "sonicsGirl" },
-            { name: "Monkey Wrench (Drop D)", url: "monkeyWrench" },
+            { name: "Monkey Wrench", url: "monkeyWrench" },
             { name: "Three Little Pigs", url: "3LittlePigs" },
             { name: "See You in Hell", url: "seeYouInHell" },
             { name: "22 Acacia Avenue", url: "22Acacia" },
@@ -1388,16 +1395,40 @@ I believe in a thing called love, Ooh! `,
         ];
 
 
-        // These will hold the CURRENTLY randomized versions of the lists
         let linksData1_shuffled = [];
         let linksData2_shuffled = [];
-
-        // This will be the combined list used by the "Next Song" button
         let currentPlaybackList = [];
-        let currentPlaybackIndex = -1;
+        let currentPlaybackIndex = -1; // -1 means before the first song
+
+        // Store references to the actual DOM elements for reuse
+        let lyricsDisplayArea;
+        let lyricsTitleElement;
+        let lyricsContentAreaElement;
+        let backSongBtnElement;
+        let nextSongBtnElement;
+
+        // Function to create the standard song display structure
+        function createSongDisplayStructure() {
+            lyricsDisplayArea.innerHTML = `
+                <h3 id="lyricsTitle"></h3>
+                <div id="lyricsContentArea"></div>
+                <button id="backSongBtn" class="nav-buttons">&lt;</button>
+                <button id="nextSongBtn" class="nav-buttons">Next</button>
+            `;
+            // Re-assign references after re-creating elements
+            lyricsTitleElement = document.getElementById('lyricsTitle');
+            lyricsContentAreaElement = document.getElementById('lyricsContentArea');
+            backSongBtnElement = document.getElementById('backSongBtn');
+            nextSongBtnElement = document.getElementById('nextSongBtn');
+
+            // Re-attach event listeners since buttons were re-created
+            backSongBtnElement.addEventListener('click', loadPreviousSong);
+            nextSongBtnElement.addEventListener('click', loadNextSong);
+        }
+
 
         function shuffleArray(array) {
-            const shuffledArray = [...array]; // Create a shallow copy to avoid modifying the original
+            const shuffledArray = [...array];
             for (let i = shuffledArray.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
@@ -1405,137 +1436,152 @@ I believe in a thing called love, Ooh! `,
             return shuffledArray;
         }
 
-        // Renders a list in the HTML and stores its shuffled version
         function renderAndStoreShuffledList(ulId, originalData, storeIntoVariable) {
             const ulElement = document.getElementById(ulId);
             ulElement.innerHTML = '';
 
             const shuffledData = shuffleArray(originalData);
-            // Store the shuffled version for later playback
             if (storeIntoVariable === 'linksData1_shuffled') {
                 linksData1_shuffled = shuffledData;
             } else if (storeIntoVariable === 'linksData2_shuffled') {
                 linksData2_shuffled = shuffledData;
             }
 
-            shuffledData.forEach((link, index) => {
+            shuffledData.forEach((link) => {
                 const listItem = document.createElement('li');
                 const anchor = document.createElement('a');
                 anchor.textContent = link.name;
                 anchor.onclick = (event) => {
                     event.preventDefault();
                     // When a song is clicked, rebuild the playback list from the current shuffled states
-                    // and set the current index to the clicked song.
                     currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
                     currentPlaybackIndex = currentPlaybackList.findIndex(item => item.url === link.url);
-                    displayLyrics(link.url, link.name);
+                    displaySong(link.url, link.name);
                 };
                 listItem.appendChild(anchor);
                 ulElement.appendChild(listItem);
             });
         }
 
-        function displayLyrics(lyricsKey, songName) {
-            const lyricsDisplayArea = document.getElementById('lyricsDisplay');
-            const lyricsTitle = document.getElementById('lyricsTitle');
-            const lyricsContentArea = document.getElementById('lyricsContentArea');
-            const nextSongBtn = document.getElementById('nextSongBtn');
-            const backSongBtn = document.getElementById('backSongBtn'); // Get back button
-            const endOfSetMessage = document.getElementById('endOfSetMessage');
+        function displaySong(lyricsKey, songName) {
+    // Ensure the standard song display structure is present
+    if (!lyricsTitleElement || !lyricsContentAreaElement) {
+        createSongDisplayStructure();
+    }
 
-            lyricsTitle.textContent = songName;
+    // Make sure the lyricsDisplayArea is visible
+    lyricsDisplayArea.style.display = 'block';
 
-            if (lyricsData[lyricsKey]) {
-                lyricsContentArea.innerHTML = `<pre>${lyricsData[lyricsKey]}</pre>`;
-            } else {
-                lyricsContentArea.innerHTML = `<pre>Lyrics not found for this song.</pre>`;
-            }
+    lyricsTitleElement.textContent = songName;
 
-            // Always hide end message and show buttons when a song is displayed
-            endOfSetMessage.style.display = 'none';
-            nextSongBtn.style.display = 'inline-block';
-            backSongBtn.style.display = 'inline-block'; // Show back button
+    if (lyricsData[lyricsKey]) {
+        lyricsContentAreaElement.innerHTML = `<pre>${lyricsData[lyricsKey]}</pre>`;
+    } else {
+        lyricsContentAreaElement.innerHTML = `<pre>Lyrics not found for this song.</pre>`;
+    }
 
-            // Disable back button if at the start of the list
-            if (currentPlaybackIndex <= 0) {
-                backSongBtn.disabled = true;
-            } else {
-                backSongBtn.disabled = false;
-            }
+    // Update button states
+    backSongBtnElement.style.display = 'inline-block';
+    nextSongBtnElement.style.display = 'inline-block';
+    backSongBtnElement.disabled = (currentPlaybackIndex <= 0);
+    nextSongBtnElement.disabled = false; // Keep Next button enabled, even on the last song
 
-            // Disable next button if at the end of the list
-            if (currentPlaybackIndex >= currentPlaybackList.length - 1) {
-                nextSongBtn.disabled = true;
-            } else {
-                nextSongBtn.disabled = false;
-            }
+    lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    lyricsDisplayArea.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-            // Ensure the lyrics display is visible
-            lyricsDisplayArea.style.display = 'block';
+                function loadNextSong() {
+    if (currentPlaybackList.length === 0) {
+        currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+        currentPlaybackIndex = -1;
+    }
 
-            // Scroll the main page to bring the lyrics display to the top of the viewport
-            lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const nextPotentialIndex = currentPlaybackIndex + 1;
 
-            // Also, ensure the internal content of the lyrics display scrolls to the top
-            lyricsDisplayArea.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    if (nextPotentialIndex >= currentPlaybackList.length) {
+        // *** End of Set logic ***
+        // Clear the display area and show only the "End of Set" message with buttons
+        lyricsDisplayArea.innerHTML = `
+            <div class="end-of-set-message">End of Set</div>
+            <button id="backSongBtn" class="nav-buttons"><</button>
+            <button id="nextSongBtn" class="nav-buttons" disabled>Next</button>
+        `;
+        lyricsDisplayArea.style.display = 'block';
+        lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        function loadNextSong() {
-            currentPlaybackIndex++; // Move to the next index in the currentPlaybackList
-            if (currentPlaybackIndex < currentPlaybackList.length) {
-                const nextSong = currentPlaybackList[currentPlaybackIndex];
-                displayLyrics(nextSong.url, nextSong.name);
-            } else {
-                // End of the set
-                document.getElementById('nextSongBtn').style.display = 'none';
-                document.getElementById('backSongBtn').style.display = 'none'; // Hide back button too
-                document.getElementById('lyricsTitle').textContent = '';
-                document.getElementById('lyricsContentArea').innerHTML = '';
-                document.getElementById('endOfSetMessage').style.display = 'block';
+        // Re-assign button references
+        backSongBtnElement = document.getElementById('backSongBtn');
+        nextSongBtnElement = document.getElementById('nextSongBtn');
 
-                document.getElementById('lyricsDisplay').style.display = 'block';
-                document.getElementById('lyricsDisplay').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
+        // Re-attach event listeners
+        backSongBtnElement.addEventListener('click', loadPreviousSong);
+        nextSongBtnElement.addEventListener('click', loadNextSong);
+
+        // Update index to indicate end of list
+        currentPlaybackIndex = currentPlaybackList.length;
+    } else {
+        // *** Display next song logic ***
+        currentPlaybackIndex = nextPotentialIndex;
+        const nextSong = currentPlaybackList[currentPlaybackIndex];
+        displaySong(nextSong.url, nextSong.name);
+    }
+}
+
 
         function loadPreviousSong() {
-            currentPlaybackIndex--; // Move to the previous index
+            currentPlaybackIndex--;
+
             if (currentPlaybackIndex >= 0) {
+                // There's a previous song to display
                 const prevSong = currentPlaybackList[currentPlaybackIndex];
-                displayLyrics(prevSong.url, prevSong.name);
+                displaySong(prevSong.url, prevSong.name);
             } else {
-                // At the beginning of the set, disable back button or handle as needed
-                document.getElementById('backSongBtn').disabled = true;
+                // If we're at index -1 (before the first song), hide display entirely
+                lyricsDisplayArea.style.display = 'none';
+                // Clear the content of lyricsDisplayArea when hidden
+                lyricsDisplayArea.innerHTML = ''; 
+                // Reset button references in case they were removed
+                lyricsTitleElement = null;
+                lyricsContentAreaElement = null;
+                backSongBtnElement = null;
+                nextSongBtnElement = null;
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Initial render and shuffle for both lists
+            lyricsDisplayArea = document.getElementById('lyricsDisplay'); // Initialize global reference
+
+            // Initial rendering of shuffled lists
             renderAndStoreShuffledList('linkList1', linksData1_original, 'linksData1_shuffled');
             renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
 
+            currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+            currentPlaybackIndex = -1; // No song loaded initially
+
+            // Attach event listeners for randomize buttons
             document.getElementById('randomizeBtn1').addEventListener('click', () => {
                 renderAndStoreShuffledList('linkList1', linksData1_original, 'linksData1_shuffled');
-                // Hide lyrics and buttons if visible, as the list order has changed
-                document.getElementById('nextSongBtn').style.display = 'none';
-                document.getElementById('backSongBtn').style.display = 'none';
-                document.getElementById('lyricsDisplay').style.display = 'none';
-                document.getElementById('endOfSetMessage').style.display = 'none';
-                currentPlaybackIndex = -1; // Reset index for fresh start
+                currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                currentPlaybackIndex = -1; // Reset index
+                lyricsDisplayArea.style.display = 'none'; // Hide lyrics display
+                lyricsDisplayArea.innerHTML = ''; // Clear content
+                lyricsTitleElement = null; // Clear references
+                lyricsContentAreaElement = null;
+                backSongBtnElement = null;
+                nextSongBtnElement = null;
             });
 
             document.getElementById('randomizeBtn2').addEventListener('click', () => {
                 renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
-                // Hide lyrics and buttons if visible
-                document.getElementById('nextSongBtn').style.display = 'none';
-                document.getElementById('backSongBtn').style.display = 'none';
-                document.getElementById('lyricsDisplay').style.display = 'none';
-                document.getElementById('endOfSetMessage').style.display = 'none';
-                currentPlaybackIndex = -1; // Reset index for fresh start
+                currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                currentPlaybackIndex = -1; // Reset index
+                lyricsDisplayArea.style.display = 'none'; // Hide lyrics display
+                lyricsDisplayArea.innerHTML = ''; // Clear content
+                lyricsTitleElement = null; // Clear references
+                lyricsContentAreaElement = null;
+                backSongBtnElement = null;
+                nextSongBtnElement = null;
             });
-
-            document.getElementById('nextSongBtn').addEventListener('click', loadNextSong);
-            document.getElementById('backSongBtn').addEventListener('click', loadPreviousSong); // Add event listener for back button
         });
     </script>
 </head>
@@ -1551,10 +1597,6 @@ I believe in a thing called love, Ooh! `,
         </ul>
 
     <div id="lyricsDisplay">
-        <h3 id="lyricsTitle"></h3>
-        <div id="lyricsContentArea">
-            </div>
-        <button id="backSongBtn" style="display: none;">&lt;</button> <button id="nextSongBtn" style="display: none;">Next</button> <div id="endOfSetMessage" style="display: none;">End of Set</div>
-    </div>
+        </div>
 </body>
 </html>
