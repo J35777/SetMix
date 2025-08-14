@@ -1379,6 +1379,7 @@ Everybody says she's lookin' good
 And the lady knows it's understood
 Strutter x3 `,
         }
+        
         const linksData1_original = [
             { name: "Lifestyles of the Rich and Famous", url: "lifestyles" },
             { name: "Dig In", url: "digIn" },
@@ -1389,7 +1390,7 @@ Strutter x3 `,
             { name: "General Contractor", url: "generalContractor" },
             { name: "Big Air is God", url: "bigAir" },
             { name: "Sonics Dance Team Girl", url: "sonicsGirl" },
-            { name: "Monkey Wrench (Drop D)", url: "monkeyWrench" },
+            { name: "Monkey Wrench", url: "monkeyWrench" },
             { name: "Three Little Pigs", url: "3LittlePigs" },
             { name: "See You in Hell", url: "seeYouInHell" },
             { name: "22 Acacia Avenue", url: "22Acacia" },
@@ -1492,6 +1493,37 @@ Strutter x3 `,
             });
         }
 
+        function renderSeasonedList(ulId, originalData) {
+            const ulElement = document.getElementById(ulId);
+            ulElement.innerHTML = '';
+
+            // Shuffle all songs except for "Seasons in the Abyss"
+            const nonSeasonsSongs = originalData.filter(song => song.url !== 'seasons');
+            const shuffledNonSeasons = shuffleArray(nonSeasonsSongs);
+
+            // Find "Seasons in the Abyss"
+            const seasonsInTheAbyss = originalData.find(song => song.url === 'seasons');
+
+            // Add "Seasons in the Abyss" to the end of the list
+            const seasonedData = [...shuffledNonSeasons, seasonsInTheAbyss];
+            linksData2_shuffled = seasonedData; // Store this new list
+
+            seasonedData.forEach((link) => {
+                const listItem = document.createElement('li');
+                const anchor = document.createElement('a');
+                anchor.textContent = link.name;
+                anchor.onclick = (event) => {
+                    event.preventDefault();
+                    // Rebuild the playback list from the current shuffled states, including the seasoned list
+                    currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                    currentPlaybackIndex = currentPlaybackList.findIndex(item => item.url === link.url);
+                    displaySong(link.url, link.name);
+                };
+                listItem.appendChild(anchor);
+                ulElement.appendChild(listItem);
+            });
+        }
+
         function displaySong(lyricsKey, songName) {
     // Ensure the standard song display structure is present
     if (!lyricsTitleElement || !lyricsContentAreaElement) {
@@ -1568,7 +1600,7 @@ Strutter x3 `,
                 // If we're at index -1 (before the first song), hide display entirely
                 lyricsDisplayArea.style.display = 'none';
                 // Clear the content of lyricsDisplayArea when hidden
-                lyricsDisplayArea.innerHTML = ''; 
+                lyricsDisplayArea.innerHTML = '';
                 // Reset button references in case they were removed
                 lyricsTitleElement = null;
                 lyricsContentAreaElement = null;
@@ -1611,6 +1643,19 @@ Strutter x3 `,
                 backSongBtnElement = null;
                 nextSongBtnElement = null;
             });
+
+            // New event listener for the Seasoned button
+            document.getElementById('seasonedBtn2').addEventListener('click', () => {
+                renderSeasonedList('linkList2', linksData2_original);
+                currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                currentPlaybackIndex = -1; // Reset index
+                lyricsDisplayArea.style.display = 'none'; // Hide lyrics display
+                lyricsDisplayArea.innerHTML = ''; // Clear content
+                lyricsTitleElement = null; // Clear references
+                lyricsContentAreaElement = null;
+                backSongBtnElement = null;
+                nextSongBtnElement = null;
+            });
         });
     </script>
 </head>
@@ -1622,10 +1667,11 @@ Strutter x3 `,
 
     <h2>Halfstep</h2>
     <button id="randomizeBtn2">Randomize</button>
+    <button id="seasonedBtn2">Seasoned</button>
     <ul id="linkList2">
         </ul>
 
     <div id="lyricsDisplay">
         </div>
 </body>
-</html>
+</html> 
