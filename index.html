@@ -1497,15 +1497,17 @@ Strutter x3 `,
             const ulElement = document.getElementById(ulId);
             ulElement.innerHTML = '';
 
-            // Shuffle all songs except for "Seasons in the Abyss"
+            // Shuffle all songs except for "south+Seasons in the Abyss"
+            const nonSeasonsSongs = originalData.filter(song => song.url !== 'south');
             const nonSeasonsSongs = originalData.filter(song => song.url !== 'seasons');
             const shuffledNonSeasons = shuffleArray(nonSeasonsSongs);
 
-            // Find "Seasons in the Abyss"
+            // Find "south+Seasons in the Abyss"
+            const seasonsInTheAbyss = originalData.find(song => song.url === 'south');
             const seasonsInTheAbyss = originalData.find(song => song.url === 'seasons');
 
-            // Add "Seasons in the Abyss" to the end of the list
-            const seasonedData = [...shuffledNonSeasons, seasonsInTheAbyss];
+            // Add "south+Seasons in the Abyss" to the end of the list
+            const seasonedData = [...shuffledNonSeasons, SouthOfHeaven, seasonsInTheAbyss];
             linksData2_shuffled = seasonedData; // Store this new list
 
             seasonedData.forEach((link) => {
