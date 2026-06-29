@@ -131,6 +131,485 @@
     </style>
     <script defer>
         const lyricsData = {
+            "lifestyles": `
+Lifestyles of the Rich and Famous!
+
+Oh my god, oh my god, what am I going to do?
+I'm so bored, I'm so bored, I'm so bored with you
+And I don't care, I don't care, I don't care, I don't care
+I'm so bored, I'm so bored, I'm so bored with you
+
+Yeah!
+Oh, all the fancy clothes,
+And all the big-nosed shows
+And all the cars and all the jewels
+They're all just boring tools
+To make you feel like you're above
+Everyone else, and not just another dove
+In the concrete jungle, with nothing to prove
+Except how much money you can move
+
+(Chorus)
+Oh my god, oh my god, what am I going to do?
+I'm so bored, I'm so bored, I'm so bored with you
+And I don't care, I don't care, I don't care, I don't care
+I'm so bored, I'm so bored, I'm so bored with you
+
+The champagne wishes and caviar dreams
+Are just another prison, it seems
+You're trapped in your mansion, alone and so grim
+While the world outside is bursting with whim
+And laughter and struggle and true, raw desire
+You're stuck in your gilded, self-made mire
+
+(Chorus)
+Oh my god, oh my god, what am I going to do?
+I'm so bored, I'm so bored, I'm so bored with you
+And I don't care, I don't care, I don't care, I don't care
+I'm so bored, I'm so bored, I'm so bored with you
+
+So burn it down, burn it down, set it all aflame
+The empty glamour, the endless, hollow game
+Of chasing perfection, a flawless facade
+While your soul cries out, broken and flawed
+Yeah, tear it down, tear it down, let the wreckage fall
+And find something real, beyond the grand hall.
+
+(Outro)
+So bored, so bored, so bored with you!
+Yeah!
+`,
+            "digIn": `Lyrics for Dig In...`,
+            "sob": `Lyrics for Son of a Bitch...`,
+            "allTheSmallThings": `Lyrics for All the Small Things...`,
+            "ThingCalledLove": `Lyrics for I Believe in a Thing Called Love...`,
+            "java": `Lyrics for Java Junkie...`,
+            "generalContractor": `Lyrics for General Contractor...`,
+            "bigAir": `Lyrics for Big Air is God...`,
+            "sonicsGirl": `Lyrics for Sonics Dance Team Girl...`,
+            "monkeyWrench": `Lyrics for Monkey Wrench...`,
+            "3LittlePigs": `Lyrics for Three Little Pigs...`,
+            "seeYouInHell": `Lyrics for See You in Hell...`,
+            "22Acacia": `Lyrics for 22 Acacia Avenue...`,
+            "trooper": `Lyrics for The Trooper...`,
+            "breakingLaw": `Lyrics for Breaking the Law...`,
+            "grinder": `Lyrics for Grinder...`,
+            "myOwnWorst": `Lyrics for My Own Worst Enemy...`,
+            "metalChurch": `Lyrics for Metal Church...`,
+            "seekAndDestroy": `Lyrics for Seek and Destroy...`,
+            "bellTolls": `Lyrics for For Whom the Bell Tolls...`,
+            "amIEvil": `Lyrics for Am I Evil...`,
+            "eaglesDare": `Lyrics for Where Eagles Dare...`,
+            "killedByDeath": `Lyrics for Killed by Death...`,
+            "blitzkrieg": `Lyrics for Blitzkrieg Bop...`,
+            "takeItOnTheRun": `Lyrics for Take it on the Run...`,
+            "cycoVision": `Lyrics for Cyco Vision...`,
+            "subliminal": `Lyrics for Subliminal...`,
+            "goodTimesl": `Lyrics for Good Times at the Gates of Hell...`,
+            "seasons": `Lyrics for Seasons in the Abyss...`,
+            "south": `Lyrics for South of Heaven...`,
+            "basketCase": `Lyrics for Basket Case...`,
+            "whenIcomeAround": `Lyrics for When I Come Around...`,
+            "fight4Right": `Lyrics for Fight for Your Right...`,
+            "loveGun": `Lyrics for Love Gun...`,
+            "detroit": `Lyrics for Detroit Rock City...`,
+            "aintLikeThat": `Lyrics for It Ain't Like That...`,
+            "talkDirty": `Lyrics for Talk Dirty to Me...`,
+            "Strutter": `Lyrics for Strutter...`,
+        };
+
+        const linksData1_original = [
+            { name: "Lifestyles of the Rich and Famous", url: "lifestyles" },
+            { name: "Dig In", url: "digIn" },
+            { name: "Son of a Bitch", url: "sob" },
+            { name: "All the Small Things", url: "allTheSmallThings" },
+            { name: "I Believe in a Thing Called Love", url: "ThingCalledLove" },
+            { name: "Java Junkie", url: "java" },
+            { name: "General Contractor", url: "generalContractor" },
+            { name: "Big Air is God", url: "bigAir" },
+            { name: "Sonics Dance Team Girl", url: "sonicsGirl" },
+            { name: "Monkey Wrench", url: "monkeyWrench" },
+            { name: "Three Little Pigs", url: "3LittlePigs" },
+            { name: "See You in Hell", url: "seeYouInHell" },
+            { name: "22 Acacia Avenue", url: "22Acacia" },
+            { name: "The Trooper", url: "trooper" },
+            { name: "Breaking the Law", url: "breakingLaw" },
+            { name: "Grinder", url: "grinder" },
+            { name: "My Own Worst Enemy", url: "myOwnWorst" },
+            { name: "Metal Church", url: "metalChurch" },
+            { name: "Seek and Destroy", url: "seekAndDestroy" },
+            { name: "For Whom the Bell Tolls", url: "bellTolls" },
+            { name: "Am I Evil", url: "amIEvil" },
+            { name: "Where Eagles Dare", url: "eaglesDare" },
+            { name: "Killed by Death", url: "killedByDeath" },
+            { name: "Blitzkrieg Bop", url: "blitzkrieg" },
+            { name: "Take it on the Run", url: "takeItOnTheRun" },
+            { name: "Cyco Vision", url: "cycoVision" },
+            { name: "Subliminal", url: "subliminal" },
+            { name: "Good Times at the Gates of Hell", url: "goodTimesl" },
+        ];
+
+        const linksData2_original = [
+           { name: "Seasons in the Abyss", url: "seasons" },
+           { name: "South of Heaven", url: "south" },
+           { name: "Basket Case", url: "basketCase" },
+           { name: "When I Come Around", url: "whenIcomeAround" },
+           { name: "Fight for Your Right", url: "fight4Right" },
+           { name: "Love Gun", url: "loveGun" },
+           { name: "Detroit Rock City", url: "detroit" },
+           { name: "It Ain't Like That", url: "aintLikeThat" },
+           { name: "Talk Dirty to Me", url: "talkDirty" },
+           { name: "Strutter", url: "Strutter" },
+        ];
+
+
+        let linksData1_shuffled = [];
+        let linksData2_shuffled = [];
+        let currentPlaybackList = [];
+        let currentPlaybackIndex = -1; // -1 means before the first song
+
+        // Store references to the actual DOM elements for reuse
+        let lyricsDisplayArea;
+        let lyricsTitleElement;
+        let lyricsContentAreaElement;
+        let backSongBtnElement;
+        let nextSongBtnElement;
+
+        // Function to create the standard song display structure
+        function createSongDisplayStructure() {
+            lyricsDisplayArea.innerHTML = `
+                <h3 id="lyricsTitle"></h3>
+                <div id="lyricsContentArea"></div>
+                <button id="backSongBtn" class="nav-buttons">&lt;</button>
+                <button id="nextSongBtn" class="nav-buttons">Next</button>
+            `;
+            // Re-assign references after re-creating elements
+            lyricsTitleElement = document.getElementById('lyricsTitle');
+            lyricsContentAreaElement = document.getElementById('lyricsContentArea');
+            backSongBtnElement = document.getElementById('backSongBtn');
+            nextSongBtnElement = document.getElementById('nextSongBtn');
+
+            // Re-attach event listeners since buttons were re-created
+            backSongBtnElement.addEventListener('click', loadPreviousSong);
+            nextSongBtnElement.addEventListener('click', loadNextSong);
+        }
+
+
+        function shuffleArray(array) {
+            const shuffledArray = [...array];
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            }
+            return shuffledArray;
+        }
+
+        function renderAndStoreShuffledList(ulId, originalData, storeIntoVariable) {
+            const ulElement = document.getElementById(ulId);
+            ulElement.innerHTML = '';
+
+            const shuffledData = shuffleArray(originalData);
+            if (storeIntoVariable === 'linksData1_shuffled') {
+                linksData1_shuffled = shuffledData;
+            } else if (storeIntoVariable === 'linksData2_shuffled') {
+                linksData2_shuffled = shuffledData;
+            }
+
+            shuffledData.forEach((link) => {
+                const listItem = document.createElement('li');
+                const anchor = document.createElement('a');
+                anchor.textContent = link.name;
+                anchor.onclick = (event) => {
+                    event.preventDefault();
+                    // When a song is clicked, rebuild the playback list from the current shuffled states
+                    currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                    currentPlaybackIndex = currentPlaybackList.findIndex(item => item.url === link.url);
+                    displaySong(link.url, link.name);
+                };
+                listItem.appendChild(anchor);
+                ulElement.appendChild(listItem);
+            });
+        }
+
+        function renderSeasonedList(ulId, originalData) {
+            const ulElement = document.getElementById(ulId);
+            ulElement.innerHTML = '';
+
+            // Filter out both closer tracks from the shuffle pool
+            const remainingSongs = originalData.filter(song => song.url !== 'south' && song.url !== 'seasons');
+            const shuffledRemaining = shuffleArray(remainingSongs);
+
+            // Locate the specific closing track objects
+            const southOfHeaven = originalData.find(song => song.url === 'south');
+            const seasonsInTheAbyss = originalData.find(song => song.url === 'seasons');
+
+            // Append South of Heaven then Seasons in the Abyss to the end
+            const seasonedData = [...shuffledRemaining, southOfHeaven, seasonsInTheAbyss];
+            linksData2_shuffled = seasonedData;
+
+            seasonedData.forEach((link) => {
+                const listItem = document.createElement('li');
+                const anchor = document.createElement('a');
+                anchor.textContent = link.name;
+                anchor.onclick = (event) => {
+                    event.preventDefault();
+                    currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                    currentPlaybackIndex = currentPlaybackList.findIndex(item => item.url === link.url);
+                    displaySong(link.url, link.name);
+                };
+                listItem.appendChild(anchor);
+                ulElement.appendChild(listItem);
+            });
+        }
+
+        function displaySong(lyricsKey, songName) {
+    // Ensure the standard song display structure is present
+    if (!lyricsTitleElement || !lyricsContentAreaElement) {
+        createSongDisplayStructure();
+    }
+
+    // Make sure the lyricsDisplayArea is visible
+    lyricsDisplayArea.style.display = 'block';
+
+    lyricsTitleElement.textContent = songName;
+
+    if (lyricsData[lyricsKey]) {
+        lyricsContentAreaElement.innerHTML = `<pre>${lyricsData[lyricsKey]}</pre>`;
+    } else {
+        lyricsContentAreaElement.innerHTML = `<pre>Lyrics not found for this song.</pre>`;
+    }
+
+    // Update button states
+    backSongBtnElement.style.display = 'inline-block';
+    nextSongBtnElement.style.display = 'inline-block';
+    backSongBtnElement.disabled = (currentPlaybackIndex <= 0);
+    nextSongBtnElement.disabled = false; // Keep Next button enabled, even on the last song
+
+    lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    lyricsDisplayArea.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+                function loadNextSong() {
+    if (currentPlaybackList.length === 0) {
+        currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+        currentPlaybackIndex = -1;
+    }
+
+    const nextPotentialIndex = currentPlaybackIndex + 1;
+
+    if (nextPotentialIndex >= currentPlaybackList.length) {
+        // *** End of Set logic ***
+        // Clear the display area and show only the "End of Set" message with buttons
+        lyricsDisplayArea.innerHTML = `
+            <div class="end-of-set-message">End of Set</div>
+            <button id="backSongBtn" class="nav-buttons"><</button>
+            <button id="nextSongBtn" class="nav-buttons" disabled>Next</button>
+        `;
+        lyricsDisplayArea.style.display = 'block';
+        lyricsDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Re-assign button references
+        backSongBtnElement = document.getElementById('backSongBtn');
+        nextSongBtnElement = document.getElementById('nextSongBtn');
+
+        // Re-attach event listeners
+        backSongBtnElement.addEventListener('click', loadPreviousSong);
+        nextSongBtnElement.addEventListener('click', loadNextSong);
+
+        // Update index to indicate end of list
+        currentPlaybackIndex = currentPlaybackList.length;
+    } else {
+        // *** Display next song logic ***
+        currentPlaybackIndex = nextPotentialIndex;
+        const nextSong = currentPlaybackList[currentPlaybackIndex];
+        displaySong(nextSong.url, nextSong.name);
+    }
+}
+
+
+        function loadPreviousSong() {
+            currentPlaybackIndex--;
+
+            if (currentPlaybackIndex >= 0) {
+                // There's a previous song to display
+                const prevSong = currentPlaybackList[currentPlaybackIndex];
+                displaySong(prevSong.url, prevSong.name);
+            } else {
+                // If we're at index -1 (before the first song), hide display entirely
+                lyricsDisplayArea.style.display = 'none';
+                // Clear the content of lyricsDisplayArea when hidden
+                lyricsDisplayArea.innerHTML = '';
+                // Reset button references in case they were removed
+                lyricsTitleElement = null;
+                lyricsContentAreaElement = null;
+                backSongBtnElement = null;
+                nextSongBtnElement = null;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lyricsDisplayArea = document.getElementById('lyricsDisplay'); // Initialize global reference
+
+            // Initial rendering of shuffled lists
+            renderAndStoreShuffledList('linkList1', linksData1_original, 'linksData1_shuffled');
+            renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
+
+            currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+            currentPlaybackIndex = -1; // No song loaded initially
+
+            // Attach event listeners for randomize buttons
+            document.getElementById('randomizeBtn1').addEventListener('click', () => {
+                renderAndStoreShuffledList('linkList1', linksData1_original, 'linksData1_shuffled');
+                currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                currentPlaybackIndex = -1; // Reset index
+                lyricsDisplayArea.style.display = 'none'; // Hide lyrics display
+                lyricsDisplayArea.innerHTML = ''; // Clear content
+                lyricsTitleElement = null; // Clear references
+                lyricsContentAreaElement = null;
+                backSongBtnElement = null;
+                nextSongBtnElement = null;
+            });
+
+            document.getElementById('randomizeBtn2').addEventListener('click', () => {
+                renderAndStoreShuffledList('linkList2', linksData2_original, 'linksData2_shuffled');
+                currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                currentPlaybackIndex = -1; // Reset index
+                lyricsDisplayArea.style.display = 'none'; // Hide lyrics display
+                lyricsDisplayArea.innerHTML = ''; // Clear content
+                lyricsTitleElement = null; // Clear references
+                lyricsContentAreaElement = null;
+                backSongBtnElement = null;
+                nextSongBtnElement = null;
+            });
+
+            // Event listener for the Seasoned button
+            document.getElementById('seasonedBtn2').addEventListener('click', () => {
+                renderSeasonedList('linkList2', linksData2_original);
+                currentPlaybackList = [...linksData1_shuffled, ...linksData2_shuffled];
+                currentPlaybackIndex = -1; // Reset index
+                lyricsDisplayArea.style.display = 'none'; // Hide lyrics display
+                lyricsDisplayArea.innerHTML = ''; // Clear content
+                lyricsTitleElement = null; // Clear references
+                lyricsContentAreaElement = null;
+                backSongBtnElement = null;
+                nextSongBtnElement = null;
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Normal</h1>
+    <button id="randomizeBtn1">Randomize</button>
+    <ul id="linkList1">
+        </ul>
+
+    <h2>Halfstep</h2>
+    <button id="randomizeBtn2">Randomize</button>
+    <button id="seasonedBtn2">Seasoned</button>
+    <ul id="linkList2">
+        </ul>
+
+    <div id="lyricsDisplay">
+        </div>
+</body>
+</html>
+        li {
+            margin-bottom: 10px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #lyricsDisplay {
+            margin-top: 4px;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            min-height: 95vh;
+            max-height: 95vh;
+            overflow-y: auto;
+            display: none; /* Keep hidden by default */
+            box-sizing: border-box;
+            width: 100%;
+            position: relative; /* For potential centering of end message */
+        }
+        #lyricsDisplay h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #0056b3;
+            font-size: 1.5em;
+        }
+        #lyricsContentArea {
+            margin-top: 10px;
+            padding-top: 0;
+            font-size: 1.1em;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        #lyricsContentArea pre {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-weight: 900;
+            filter: brightness(0.4) contrast(2.5);
+            color: black;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            overflow-y: auto;
+            max-height: calc(95vh - 120px);
+        }
+        .lyrics-content {
+            display: none;
+        }
+        .lyrics-content.active {
+            display: block;
+        }
+        .nav-buttons {
+            padding: 5px 10px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-top: 20px;
+            margin-right: 10px; /* Space between buttons */
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .nav-buttons:hover {
+            background-color: #218838;
+        }
+        /* Style for the end of set message when it's the only content */
+        .end-of-set-message {
+            font-size: 1.8em; /* Make it larger */
+            font-weight: bold;
+            color: #dc3545;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%; /* Occupy more width */
+            box-sizing: border-box;
+            padding: 20px;
+        }
+    </style>
+    <script defer>
+        const lyricsData = {
             "lifestyles": `Always see it on TV, Or read it in the magazines
 Celebrities want sympathy, All they do is piss and moan
 Inside the Rolling Stone, Talkin' about how hard life can be
